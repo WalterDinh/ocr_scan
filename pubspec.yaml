@@ -1,0 +1,53 @@
+name: my_app
+description: A new Flutter project.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.3 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  cached_network_image: ^3.2.3
+  shared_preferences: ^2.0.18
+  dio: ^4.0.0
+  dio_http_cache: ^0.3.0
+  pretty_dio_logger: ^1.1.1
+  logger: ^1.2.2
+  intl: ^0.17.0
+  simple_animations: ^5.0.0+3
+  flutter_bloc: ^8.1.2
+  json_annotation: ^4.1.0
+  sliding_up_panel: ^2.0.0+1
+  flutter_localizations:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  analyzer: any
+  dart_code_metrics: any
+  flutter_lints: ^2.0.1
+  json_serializable: ^4.1.4
+  build_runner: ^2.1.11
+
+
+flutter:
+  generate: true
+  uses-material-design: true
+  assets:
+    - assets/images/
+  fonts:
+   - family: CircularStd
+     fonts:
+       - asset: assets/fonts/CircularStd-Book.ttf
+
+       - asset: assets/fonts/CircularStd-Medium.ttf
+         weight: 600
+
+       - asset: assets/fonts/CircularStd-Black.ttf
+         weight: 700
+
+       - asset: assets/fonts/CircularStd-Bold.ttf
+         weight: 900
