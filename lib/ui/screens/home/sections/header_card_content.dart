@@ -3,6 +3,12 @@ part of '../home.dart';
 class _HeaderCardContent extends StatelessWidget {
   static const double height = 582;
 
+  const _HeaderCardContent({
+    required this.onOpenModal,
+  });
+
+  final Function(BuildContext) onOpenModal;
+
   @override
   Widget build(BuildContext context) {
     var themeCubit = BlocProvider.of<ThemeCubit>(context, listen: true);
@@ -45,16 +51,16 @@ class _HeaderCardContent extends StatelessWidget {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               OutlinedButton(
-                onPressed: null,
-                child: Text('OutlinedButton'),
+                onPressed: () => onOpenModal(context),
+                child: const Text('OutlinedButton'),
               ),
-              TextButton(
+              const TextButton(
                 onPressed: null,
                 child: Text('TextButton'),
               ),
-              ElevatedButton(
+              const ElevatedButton(
                 //Button Color is as define in theme
                 onPressed: null,
                 child: Text("Send"), //Text Color as define in theme

@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:my_app/ui/widgets/image_picker/image_picker_modal.dart';
 import '../../../states/theme/theme_cubit.dart';
 
 part 'sections/pokemon_news.dart';
@@ -48,6 +52,22 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  File? fileImage;
+  void showImagePickerModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => ImagePickerModal(
+        onTakeImage: (CroppedFile? data) {
+          setState(() {
+            fileImage = File(data!.path);
+          });
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     appLocalization = AppLocalizations.of(context)!;
@@ -80,7 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
-              background: _HeaderCardContent(),
+              background: _HeaderCardContent(
+                onOpenModal: (p0) => showImagePickerModal(p0),
+              ),
             ),
           ),
         ],

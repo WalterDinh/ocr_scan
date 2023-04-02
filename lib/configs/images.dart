@@ -17,5 +17,5 @@ class AppImages {
   // static const thumbnail = _Image('thumbnail.png');
   // static const pikloader = _Image('pika_loader.gif');
 
-  static Future precacheAssets(BuildContext context) async {}
+  // static Future precacheAssets(BuildContext context) async {}
 }

@@ -118,6 +118,7 @@ class OutlinedButtonThemeApp {
           style: outlineButtonStyle.merge(OutlinedButton.styleFrom(
     backgroundColor: AppColors.lightGrey,
     foregroundColor: AppColors.black,
+    disabledForegroundColor: AppColors.black,
     side: const BorderSide(color: AppColors.black, width: 2),
   )));
 
@@ -126,6 +127,7 @@ class OutlinedButtonThemeApp {
           style: outlineButtonStyle.merge(OutlinedButton.styleFrom(
     backgroundColor: AppColors.black,
     foregroundColor: AppColors.lightGrey,
+    disabledForegroundColor: AppColors.lightGrey,
     side: const BorderSide(color: AppColors.lightGrey, width: 2),
   )));
 }

@@ -28,7 +28,13 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To select local pictures from library, and save posts to the device, allow us to access your photos</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>To select local pictures from library, and save posts to the device, allow us to access your photos</string>
+	<key>UISupportedInterfaceOrientations</key>	
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

@@ -21,6 +21,9 @@ dependencies:
   flutter_bloc: ^8.1.2
   json_annotation: ^4.1.0
   sliding_up_panel: ^2.0.0+1
+  image_picker: ^0.8.7
+  image_cropper: ^3.0.2
+  photo_manager: ^2.5.2
   flutter_localizations:
     sdk: flutter
 dev_dependencies:
