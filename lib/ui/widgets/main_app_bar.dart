@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/utils/size.dart';
 
-const double mainAppbarPadding = 28;
+const double mainAppBarPadding = 28;
 
 class MainSliverAppBar extends SliverAppBar {
   static const TextStyle _textStyle = TextStyle(
@@ -15,8 +15,8 @@ class MainSliverAppBar extends SliverAppBar {
   MainSliverAppBar(
       {super.key,
       GlobalKey? appBarKey,
-      String title = 'Pokedex',
-      double height = kToolbarHeight + mainAppbarPadding * 2,
+      String title = '',
+      double height = kToolbarHeight + mainAppBarPadding * 2,
       double expandedFontSize = 30,
       void Function()? onLeadingPress = AppNavigator.pop,
       void Function()? onTrailingPress,
@@ -29,7 +29,7 @@ class MainSliverAppBar extends SliverAppBar {
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            padding: const EdgeInsets.symmetric(horizontal: mainAppbarPadding),
+            padding: const EdgeInsets.symmetric(horizontal: mainAppBarPadding),
             onPressed: onLeadingPress,
             icon: Icon(
               Icons.arrow_back,
@@ -39,7 +39,7 @@ class MainSliverAppBar extends SliverAppBar {
           actions: [
             IconButton(
               padding:
-                  const EdgeInsets.symmetric(horizontal: mainAppbarPadding),
+                  const EdgeInsets.symmetric(horizontal: mainAppBarPadding),
               icon: Icon(Icons.favorite_border_outlined,
                   color: Theme.of(context).textTheme.bodyLarge!.color),
               onPressed: onTrailingPress,
@@ -60,7 +60,7 @@ class MainSliverAppBar extends SliverAppBar {
 
               final textWidth =
                   getTextSize(context, title, currentTextStyle).width;
-              final startX = mainAppbarPadding;
+              const startX = mainAppBarPadding;
               final endX = MediaQuery.of(context).size.width / 2 -
                   textWidth / 2 -
                   startX;
@@ -93,25 +93,43 @@ class MainSliverAppBar extends SliverAppBar {
         );
 }
 
-class MainAppBar extends AppBar {
-  MainAppBar({Widget? title, IconData? rightIcon})
-      : super(
-          title: title,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: const IconButton(
-            padding: EdgeInsets.symmetric(horizontal: mainAppbarPadding),
-            icon: Icon(Icons.arrow_back),
-            onPressed: AppNavigator.pop,
-          ),
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: mainAppbarPadding),
-              child: Icon(
-                rightIcon,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        );
+class MainAppBar extends StatelessWidget with PreferredSizeWidget {
+  final Widget appBarTitleText;
+  final List<Widget>? actions;
+  final bool isBackButtonEnabled;
+  final PreferredSizeWidget? bottom;
+  final Color? backgroundColor;
+  final IconThemeData? iconTheme;
+  MainAppBar({
+    Key? key,
+    required this.appBarTitleText,
+    this.actions,
+    this.isBackButtonEnabled = true,
+    this.bottom,
+    this.backgroundColor = Colors.transparent,
+    this.iconTheme,
+  }) : super(key: key);
+
+  @override
+  Size get preferredSize => AppBar().preferredSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: backgroundColor,
+      centerTitle: true,
+      elevation: 0,
+      leading: const IconButton(
+        padding: EdgeInsets.symmetric(horizontal: mainAppBarPadding),
+        icon: Icon(Icons.arrow_back_ios_new),
+        onPressed: AppNavigator.pop,
+      ),
+      automaticallyImplyLeading: isBackButtonEnabled,
+      actions: actions,
+      iconTheme:
+          iconTheme ?? IconThemeData(color: Theme.of(context).iconTheme.color),
+      title: appBarTitleText,
+      bottom: bottom,
+    );
+  }
 }
