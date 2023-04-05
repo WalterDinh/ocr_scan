@@ -26,6 +26,9 @@ dependencies:
   photo_manager: ^2.5.2
   flutter_localizations:
     sdk: flutter
+  bloc: ^8.1.1
+  meta: ^1.8.0
+  stream_transform: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

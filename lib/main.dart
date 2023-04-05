@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/app.dart';
 import 'package:my_app/core/network.dart';
+import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 
 import 'package:my_app/states/theme/theme_cubit.dart';
 
@@ -23,6 +24,7 @@ void main() async {
           ///
           /// BLoCs
           ///
+          BlocProvider<ScanPhotoBloc>(create: (context) => ScanPhotoBloc()),
 
           ///
           /// Theme Cubit
