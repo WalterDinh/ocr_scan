@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:my_app/configs/colors.dart';
+import 'package:my_app/ui/widgets/ripple.dart';
+import 'package:my_app/ui/widgets/spacer.dart';
 
 class Home2Screen extends StatelessWidget {
   final _listScanFolder = [1, 2, 3, 4, 5];
@@ -69,171 +69,115 @@ class Home2Screen extends StatelessWidget {
   Widget _buildListScanHistory() => Padding(
       padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
       child: Container(
-        height: 300.0,
+        height: 450.0,
         child: ListView.builder(
           itemCount: _listScanHistory.length,
           itemBuilder: (context, index) {
-            return cartItems(index);
-            // return Container(
-            //     color: AppColors.pink,
-            //     height: 56.0,
-            //     child: Text("Item ${_listScanHistory[index]}"));
+            return _buildItemScanHistory(index);
           },
         ),
       ));
 
-  // fixme: re-decoration
-  Widget cartItems(int index) {
-    return Container(
-      padding: const EdgeInsets.all(0),
-      margin: EdgeInsets.all(10),
-      height: 130,
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 130,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: AssetImage('assets/images/logo_flutter.jpg'),
-              fit: BoxFit.cover,
-            )),
-          ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Flexible(
-                        child: Text(
+  Widget _buildFabScan() => FloatingActionButton(
+      child: Icon(Icons.document_scanner_outlined),
+        onPressed: () => _onFabScanPressed(),
+      );
+
+  Widget _buildItemScanHistory(int index) {
+    return Card(
+      color: Colors.white60,
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                'assets/images/logo_flutter.jpg',
+                width: 56,
+                height: 64,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
                           "Item 1" + index.toString(),
-                          overflow: TextOverflow.fade,
-                          softWrap: true,
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 15),
                         ),
-                      ),
-                      Container(
-                        width: 50,
-                        child: IconButton(
-                          onPressed: () {
-                            print("Button Pressed");
-                          },
-                          color: Colors.red,
-                          icon: Icon(Icons.delete),
-                          iconSize: 20,
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          "13:00  07-09-2023",
+                          style: TextStyle(fontSize: 12),
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text("Price: "),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        '\$200',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w300),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text("Sub Total: "),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text('\$400',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            color: Colors.orange,
-                          ))
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        "Ships Free",
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                      Spacer(),
-                      Row(
-                        children: <Widget>[
-                          InkWell(
-                            // onTap: () {},
-                            splashColor: Colors.redAccent.shade200,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50)),
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.remove,
-                                  color: Colors.redAccent,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text('2'),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          InkWell(
-                            // onTap: () {},
-                            splashColor: Colors.lightBlue,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50)),
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.green,
-                                  size: 20,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                    VSpacer(8),
+                    Row(
+                      children: <Widget>[
+                        Ripple(
+                          onTap: () => _onDownload(),
+                          rippleColor: AppColors.semiGrey,
+                          child: Icon(Icons.download),
+                        ),
+                        HSpacer(8),
+                        Ripple(
+                          onTap: () => _onShare(),
+                          rippleColor: AppColors.semiGrey,
+                          child: Icon(Icons.share),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          )
-        ],
+            Column(
+              children: [
+                Ripple(
+                    onTap: () => _onShowMoreOptions(),
+                    child: Icon(Icons.more_vert))
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
+  _onDownload() {}
+
+  _onShare() {}
+
+  _onShowMoreOptions() {}
+
+  _onFabScanPressed() {}
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Scanner")),
-      body: Column(
-        children: [
-          _buildSearchCard(),
-          _buildSectionScanFolderHeader(),
-          _buildListScanFolder(),
-          _buildSectionScanHistoryHeader(),
-          _buildListScanHistory()
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            _buildSearchCard(),
+            _buildSectionScanFolderHeader(),
+            _buildListScanFolder(),
+            _buildSectionScanHistoryHeader(),
+            _buildListScanHistory()
+          ],
+        ),
+        floatingActionButton: _buildFabScan(),
       ),
     );
   }
