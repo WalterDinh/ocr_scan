@@ -59,6 +59,7 @@ abstract class AppValues {
   static const double stackedImageDefaultSpaceFactor = 0.4;
   static const double stackedImageDefaultSize = 30;
   static const double cardRecommend = 250;
+  static const double circularFlatButton = 60;
 
   static const double iconDefaultSize = 24;
   static const double emoticonDefaultSize = 22;

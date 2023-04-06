@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/configs/colors.dart';
 import 'package:my_app/core/values/app_values.dart';
 
 class Ripple extends StatelessWidget {
@@ -13,7 +12,7 @@ class Ripple extends StatelessWidget {
     Key? key,
     this.child,
     required this.onTap,
-    this.rippleColor = AppColors.black,
+    this.rippleColor = const Color(0x0338686A),
     this.rippleRadius = AppValues.smallRadius,
     this.onTapDown,
   }) : super(key: key);
