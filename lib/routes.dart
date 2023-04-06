@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/core/fade_page_route.dart';
-import 'package:my_app/ui/screens/%08select_photo/select_photo.dart';
+import 'package:my_app/ui/screens/select_photo/select_photo.dart';
 import 'package:my_app/ui/screens/home/home.dart';
 
 enum Routes { splash, home, select_photo }
