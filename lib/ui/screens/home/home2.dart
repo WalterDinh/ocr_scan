@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/configs/colors.dart';
+import 'package:my_app/routes.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
+
+import '../../widgets/main_app_bar.dart';
 
 class Home2Screen extends StatelessWidget {
   final _listScanFolder = [1, 2, 3, 4, 5];
@@ -9,25 +12,26 @@ class Home2Screen extends StatelessWidget {
 
   Home2Screen({super.key});
 
-  Widget _buildSearchCard() => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          elevation: 2.0,
+  PreferredSizeWidget _buildHomeAppBar(BuildContext context) => MainAppBar(
+        appBarTitleText: Text('Document Scan',
+            style: Theme.of(context).textTheme.headlineMedium),
+        isBackButtonShowed: false,
+      );
+
+  Widget _buildSearchView() => Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: AppColors.semiGrey,
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                SizedBox(
-                  width: 10.0,
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Enter keywords..."),
-                  ),
-                ),
+              children: [
+                Text('Enter keywords...'),
                 Icon(Icons.search),
               ],
             ),
@@ -36,7 +40,7 @@ class Home2Screen extends StatelessWidget {
       );
 
   Widget _buildSectionScanFolderHeader() => Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text("My scan folder"),
         Text("See more"),
@@ -51,26 +55,28 @@ class Home2Screen extends StatelessWidget {
           itemCount: _listScanFolder.length,
           itemBuilder: (context, index) {
             return Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: AppColors.semiGrey),
                 margin: EdgeInsets.symmetric(horizontal: 8.0),
-                color: AppColors.pink,
                 width: 56.0,
-                child: Text("Item ${_listScanFolder[index]}"));
+                child: Icon(Icons.folder));
           },
         ),
       ));
 
   Widget _buildSectionScanHistoryHeader() => Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      padding: EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text("Scan history"),
         Text("See more"),
       ]));
 
   Widget _buildListScanHistory() => Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 80.0),
       child: Container(
-        height: 450.0,
         child: ListView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
           itemCount: _listScanHistory.length,
           itemBuilder: (context, index) {
             return _buildItemScanHistory(index);
@@ -79,7 +85,7 @@ class Home2Screen extends StatelessWidget {
       ));
 
   Widget _buildFabScan() => FloatingActionButton(
-      child: Icon(Icons.document_scanner_outlined),
+        child: Icon(Icons.document_scanner_outlined),
         onPressed: () => _onFabScanPressed(),
       );
 
@@ -128,13 +134,11 @@ class Home2Screen extends StatelessWidget {
                       children: <Widget>[
                         Ripple(
                           onTap: () => _onDownload(),
-                          rippleColor: AppColors.semiGrey,
                           child: Icon(Icons.download),
                         ),
                         HSpacer(8),
                         Ripple(
                           onTap: () => _onShare(),
-                          rippleColor: AppColors.semiGrey,
                           child: Icon(Icons.share),
                         ),
                       ],
@@ -162,23 +166,26 @@ class Home2Screen extends StatelessWidget {
 
   _onShowMoreOptions() {}
 
-  _onFabScanPressed() {}
+  _onFabScanPressed() {
+    AppNavigator.push(Routes.select_photo);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
+    return Scaffold(
+      appBar: _buildHomeAppBar(context),
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            _buildSearchCard(),
+            _buildSearchView(),
             _buildSectionScanFolderHeader(),
             _buildListScanFolder(),
             _buildSectionScanHistoryHeader(),
             _buildListScanHistory()
           ],
         ),
-        floatingActionButton: _buildFabScan(),
       ),
+      floatingActionButton: _buildFabScan(),
     );
   }
 }

@@ -96,14 +96,17 @@ class MainSliverAppBar extends SliverAppBar {
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   final Widget appBarTitleText;
   final List<Widget>? actions;
+  final bool isBackButtonShowed;
   final bool isBackButtonEnabled;
   final PreferredSizeWidget? bottom;
   final Color? backgroundColor;
   final IconThemeData? iconTheme;
+
   MainAppBar({
     Key? key,
     required this.appBarTitleText,
     this.actions,
+    this.isBackButtonShowed = true,
     this.isBackButtonEnabled = true,
     this.bottom,
     this.backgroundColor = Colors.transparent,
@@ -119,11 +122,13 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       backgroundColor: backgroundColor,
       centerTitle: true,
       elevation: 0,
-      leading: const IconButton(
-        padding: EdgeInsets.symmetric(horizontal: mainAppBarPadding),
-        icon: Icon(Icons.arrow_back_ios_new),
-        onPressed: AppNavigator.pop,
-      ),
+      leading: isBackButtonShowed
+          ? const IconButton(
+              padding: EdgeInsets.symmetric(horizontal: mainAppBarPadding),
+              icon: Icon(Icons.arrow_back_ios_new),
+              onPressed: AppNavigator.pop,
+            )
+          : null,
       automaticallyImplyLeading: isBackButtonEnabled,
       actions: actions,
       iconTheme:
