@@ -7,7 +7,7 @@ import 'package:my_app/ui/widgets/spacer.dart';
 import '../../widgets/main_app_bar.dart';
 
 class Home2Screen extends StatelessWidget {
-  final _listScanFolder = [1, 2, 3, 4, 5];
+  final _listScanFolder = [1, 2, 3, 4, 5, 6, 7];
   final _listScanHistory = [1, 2, 3, 4, 5];
 
   Home2Screen({super.key});
@@ -30,7 +30,7 @@ class Home2Screen extends StatelessWidget {
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: const [
                 Text('Enter keywords...'),
                 Icon(Icons.search),
               ],
@@ -40,52 +40,64 @@ class Home2Screen extends StatelessWidget {
       );
 
   Widget _buildSectionScanFolderHeader() => Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text("My scan folder"),
-        Text("See more"),
-      ]));
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text("My scan folder"),
+            Text("See more"),
+          ]));
 
   Widget _buildListScanFolder() => Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
-      child: Container(
-        height: 56.0,
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
+      child: SizedBox(
+        height: 80.0,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: _listScanFolder.length,
           itemBuilder: (context, index) {
-            return Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: AppColors.semiGrey),
-                margin: EdgeInsets.symmetric(horizontal: 8.0),
-                width: 56.0,
-                child: Icon(Icons.folder));
+            return Column(
+              children: [
+                Container(
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle, color: AppColors.semiGrey),
+                    margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                    width: 56.0,
+                    height: 56.0,
+                    child: const Icon(
+                      Icons.folder,
+                      size: 28,
+                    )),
+                const VSpacer(4),
+                Text("Folder ${_listScanFolder[index]}")
+              ],
+            );
           },
         ),
       ));
 
   Widget _buildSectionScanHistoryHeader() => Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text("Scan history"),
-        Text("See more"),
-      ]));
+      padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text("Scan history"),
+            Text("See more"),
+          ]));
 
   Widget _buildListScanHistory() => Padding(
-      padding: EdgeInsets.fromLTRB(16.0, 0, 16.0, 80.0),
-      child: Container(
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: _listScanHistory.length,
-          itemBuilder: (context, index) {
-            return _buildItemScanHistory(index);
-          },
-        ),
+      padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 80.0),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: _listScanHistory.length,
+        itemBuilder: (context, index) {
+          return _buildItemScanHistory(index);
+        },
       ));
 
   Widget _buildFabScan() => FloatingActionButton(
-        child: Icon(Icons.document_scanner_outlined),
+        child: const Icon(Icons.document_scanner_outlined),
         onPressed: () => _onFabScanPressed(),
       );
 
@@ -107,51 +119,55 @@ class Home2Screen extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "Item 1" + index.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 15),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          "13:00  07-09-2023",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    VSpacer(8),
-                    Row(
-                      children: <Widget>[
-                        Ripple(
-                          onTap: () => _onDownload(),
-                          child: Icon(Icons.download),
-                        ),
-                        HSpacer(8),
-                        Ripple(
-                          onTap: () => _onShare(),
-                          child: Icon(Icons.share),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
+            _buildInfoScanHistory(index),
             Column(
               children: [
                 Ripple(
                     onTap: () => _onShowMoreOptions(),
-                    child: Icon(Icons.more_vert))
+                    child: const Icon(Icons.more_vert))
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoScanHistory(int index) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(
+                  "Item ${_listScanHistory[index]}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+              ],
+            ),
+            Row(
+              children: const <Widget>[
+                Text(
+                  "13:00  07-09-2023",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ],
+            ),
+            const VSpacer(8),
+            Row(
+              children: <Widget>[
+                Ripple(
+                  onTap: () => _onDownload(),
+                  child: const Icon(Icons.download),
+                ),
+                const HSpacer(8),
+                Ripple(
+                  onTap: () => _onShare(),
+                  child: const Icon(Icons.share),
+                ),
               ],
             )
           ],
