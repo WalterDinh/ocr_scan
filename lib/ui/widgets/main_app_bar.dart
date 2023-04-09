@@ -94,7 +94,7 @@ class MainSliverAppBar extends SliverAppBar {
 }
 
 class MainAppBar extends StatelessWidget with PreferredSizeWidget {
-  final Widget appBarTitleText;
+  final Widget? appBarTitleText;
   final List<Widget>? actions;
   final bool isBackButtonShowed;
   final bool isBackButtonEnabled;
@@ -104,7 +104,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
 
   MainAppBar({
     Key? key,
-    required this.appBarTitleText,
+    this.appBarTitleText,
     this.actions,
     this.isBackButtonShowed = true,
     this.isBackButtonEnabled = true,
