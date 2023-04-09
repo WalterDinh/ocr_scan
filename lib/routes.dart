@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_app/core/fade_page_route.dart';
 import 'package:my_app/ui/screens/select_photo/select_photo.dart';
 import 'package:my_app/ui/screens/home/home.dart';
-import 'package:my_app/ui/screens/home/home2.dart';
 
 enum Routes { splash, home, select_photo }
 
@@ -28,8 +27,7 @@ class AppNavigator {
       case _Paths.select_photo:
         return FadeRoute(page: const SelectPhotoScreen());
       default:
-        // return FadeRoute(page: const HomeScreen());
-        return FadeRoute(page: Home2Screen());
+        return FadeRoute(page: HomeScreen());
     }
   }
 
