@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
-import 'package:my_app/states/scan_photo/scan_photo_selecter.dart';
+import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
 import 'package:my_app/ui/screens/select_photo/widgets/item_gallery.dart';
 import 'package:my_app/ui/widgets/image_picker/image_helper.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
