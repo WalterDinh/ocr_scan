@@ -1,140 +1,66 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:my_app/configs/colors.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:my_app/ui/widgets/image_picker/image_picker_modal.dart';
-import '../../../states/theme/theme_cubit.dart';
+import 'package:my_app/routes.dart';
+import 'package:my_app/ui/screens/home/widgets/search_input.dart';
+import 'package:my_app/ui/widgets/item_scan_folder.dart';
+import 'package:my_app/ui/widgets/item_scan_history.dart';
+import 'package:my_app/ui/widgets/ripple.dart';
 
-part 'sections/pokemon_news.dart';
-part 'sections/header_card_content.dart';
+import '../../widgets/main_app_bar.dart';
+part 'sections/list_folder.dart';
+part 'sections/list_scan_history.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  final _listScanFolder = [1, 2, 3, 4, 5, 6, 7];
+  final _listScanHistory = [1, 2, 3, 4, 5];
 
-  @override
-  State<StatefulWidget> createState() => _HomeScreenState();
-}
+  HomeScreen({super.key});
 
-class _HomeScreenState extends State<HomeScreen> {
-  final ScrollController _scrollController = ScrollController();
-  late AppLocalizations appLocalization;
-
-  bool showTitle = false;
-
-  @override
-  void initState() {
-    _scrollController.addListener(_onScroll);
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (!_scrollController.hasClients) return;
-
-    final offset = _scrollController.offset;
-    final showTitle = offset > _HeaderCardContent.height - kToolbarHeight;
-
-    // Prevent unneccesary rebuild
-    if (this.showTitle == showTitle) return;
-
-    setState(() {
-      this.showTitle = showTitle;
-    });
-  }
-
-  File? fileImage;
-  void showImagePickerModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (context) => ImagePickerModal(
-        onTakeImage: (CroppedFile? data) {
-          setState(() {
-            fileImage = File(data!.path);
-          });
-          Navigator.pop(context);
-        },
-      ),
-    );
+  _onFabScanPressed() {
+    AppNavigator.push(Routes.select_photo);
   }
 
   @override
   Widget build(BuildContext context) {
-    appLocalization = AppLocalizations.of(context)!;
-
     return Scaffold(
-      body: NestedScrollView(
-        controller: _scrollController,
-        headerSliverBuilder: (_, __) => [
-          SliverAppBar(
-            expandedHeight: _HeaderCardContent.height,
-            floating: true,
-            pinned: true,
-            elevation: 0,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(30),
-              ),
-            ),
-            backgroundColor: AppColors.red,
-            flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.pin,
-              centerTitle: true,
-              title: Visibility(
-                visible: showTitle,
-                child: Text(
-                  appLocalization.bottomNavHome,
-                  style: Theme.of(context)
-                      .appBarTheme
-                      .toolbarTextStyle!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-              ),
-              background: _HeaderCardContent(
-                onOpenModal: (p0) => showImagePickerModal(p0),
-              ),
-            ),
-          ),
-        ],
-        body: Column(
+      appBar: _buildHomeAppBar(context),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
-            Text(
-              'Heading 1',
-              style: Theme.of(context).textTheme.headlineLarge,
-            ),
-            Text(
-              'Heading 2',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-            Text(
-              'Heading 1',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Text(
-              'Body 1',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            Text(
-              'Body 2',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              'Body 3',
-              style: Theme.of(context).textTheme.bodySmall,
+            const SearchInput(hintText: 'Search'),
+            _buildSectionHeader('My scan folder', () {}),
+            ListScanFolder(listScanFolder: _listScanFolder),
+            _buildSectionHeader('Scan history', () {}),
+            ListScanHistory(
+              listScanHistory: _listScanHistory,
             )
           ],
         ),
       ),
+      floatingActionButton: _buildFabScan(),
     );
   }
+
+  PreferredSizeWidget _buildHomeAppBar(BuildContext context) => MainAppBar(
+        appBarTitleText: Text('Document Scan',
+            style: Theme.of(context).textTheme.headlineMedium),
+        isBackButtonShowed: false,
+      );
+
+  Widget _buildSectionHeader(String title, Function() onPress) => Padding(
+      padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(title, style: const TextStyle(fontSize: 18)),
+        Ripple(
+          onTap: onPress,
+          child: const Text("See more"),
+        ),
+      ]));
+
+  Widget _buildFabScan() => FloatingActionButton(
+        child: const Icon(
+          Icons.document_scanner_outlined,
+        ),
+        onPressed: () => _onFabScanPressed(),
+      );
 }

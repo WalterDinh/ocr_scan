@@ -14,6 +14,8 @@ import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
 
+import '../../../routes.dart';
+
 class SelectPhotoScreen extends StatefulWidget {
   const SelectPhotoScreen({super.key});
 
@@ -177,6 +179,7 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
                                   scanBloc.add(ScanPhotoSelectChanged(
                                       photoItem:
                                           scanBloc.state.mediaList[index]));
+                                  AppNavigator.push(Routes.scan_result);
                                 },
                                 asset: scanBloc.state.mediaList[index],
                                 data: snapshot.data as Uint8List,
