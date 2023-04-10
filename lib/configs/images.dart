@@ -8,6 +8,9 @@ class _Image extends AssetImage {
 
 class AppImages {
   static const logo = _Image('logo_flutter.jpg');
+  static const intro_page1 = _Image('intro_page1.png');
+  static const intro_page2 = _Image('intro_page2.png');
+  static const intro_page3 = _Image('intro_page3.png');
   // static const charmander = _Image('charmander.png');
   // static const squirtle = _Image('squirtle.png');
   // static const pokeball = _Image('pokeball.png');

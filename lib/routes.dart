@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/fade_page_route.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
+import 'package:my_app/ui/screens/intro/intro.dart';
 import 'package:my_app/ui/screens/scan_result/scan_result.dart';
 import 'package:my_app/ui/screens/select_photo/select_photo.dart';
 import 'package:my_app/ui/screens/home/home.dart';
 
-enum Routes { splash, home, select_photo, scan_result }
+enum Routes { splash, home, select_photo, scan_result, intro }
 
 class _Paths {
   static const String splash = '/';
   static const String home = '/home';
   static const String select_photo = '/select_photo';
   static const String scan_result = '/scan_result';
+  static const String intro = '/intro';
 
   static const Map<Routes, String> _pathMap = {
     Routes.splash: _Paths.splash,
     Routes.home: _Paths.home,
     Routes.select_photo: _Paths.select_photo,
     Routes.scan_result: _Paths.scan_result,
+    Routes.intro: _Paths.intro,
   };
 
   static String of(Routes route) => _pathMap[route] ?? splash;
@@ -37,8 +40,10 @@ class AppNavigator {
         );
       case _Paths.scan_result:
         return FadeRoute(page: const ScanResultScreen());
+      case _Paths.home:
+        return FadeRoute(page: const ScanResultScreen());
       default:
-        return FadeRoute(page: HomeScreen());
+        return FadeRoute(page: const IntroScreen());
     }
   }
 
