@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/states/scan_photo/scan_photo_selecter.dart';
+import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 
 part 'sections/scan_result_image.dart';
