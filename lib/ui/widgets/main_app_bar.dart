@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/utils/size.dart';
 
@@ -121,6 +122,12 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     return AppBar(
       backgroundColor: backgroundColor,
       centerTitle: true,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarIconBrightness:
+            Brightness.dark, //<-- For Android SEE HERE (dark icons)
+        statusBarBrightness:
+            Brightness.light, //<-- For iOS SEE HERE (dark icons)
+      ),
       elevation: 0,
       leading: isBackButtonShowed
           ? const IconButton(
