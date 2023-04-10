@@ -7,7 +7,7 @@ class _Image extends AssetImage {
 }
 
 class AppImages {
-  // static const bulbasaur = _Image('bulbasaur.png');
+  static const logo = _Image('logo_flutter.jpg');
   // static const charmander = _Image('charmander.png');
   // static const squirtle = _Image('squirtle.png');
   // static const pokeball = _Image('pokeball.png');
@@ -17,5 +17,7 @@ class AppImages {
   // static const thumbnail = _Image('thumbnail.png');
   // static const pikloader = _Image('pika_loader.gif');
 
-  // static Future precacheAssets(BuildContext context) async {}
+  static Future precacheAssets(BuildContext context) async {
+    await precacheImage(logo, context);
+  }
 }
