@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/fade_page_route.dart';
+import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
 import 'package:my_app/ui/screens/scan_result/scan_result.dart';
 import 'package:my_app/ui/screens/select_photo/select_photo.dart';
 import 'package:my_app/ui/screens/home/home.dart';
@@ -28,7 +30,11 @@ class AppNavigator {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case _Paths.select_photo:
-        return FadeRoute(page: const SelectPhotoScreen());
+        return FadeRoute(
+          page: BlocProvider(
+              create: (context) => SelectImageFromGalleryBloc(),
+              child: const SelectPhotoScreen()),
+        );
       case _Paths.scan_result:
         return FadeRoute(page: const ScanResultScreen());
       default:

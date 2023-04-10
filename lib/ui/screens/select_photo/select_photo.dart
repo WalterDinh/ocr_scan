@@ -2,19 +2,18 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/core/values/app_values.dart';
-import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
-import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
+
+import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
+import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_selector.dart';
 import 'package:my_app/ui/screens/select_photo/widgets/item_gallery.dart';
 import 'package:my_app/ui/widgets/image_picker/image_helper.dart';
-import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
-
-import '../../../routes.dart';
 
 class SelectPhotoScreen extends StatefulWidget {
   const SelectPhotoScreen({super.key});
@@ -24,22 +23,44 @@ class SelectPhotoScreen extends StatefulWidget {
 }
 
 class SelectPhotoScreenState extends State<SelectPhotoScreen> {
+  static const double _endReachedThreshold = 200;
+
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey<NestedScrollViewState> _scrollKey = GlobalKey();
+
   final ImageHelper imageHelper = ImageHelper();
-  ScanPhotoBloc get scanBloc => context.read<ScanPhotoBloc>();
+  SelectImageFromGalleryBloc get selectImageFromGalleryBloc =>
+      context.read<SelectImageFromGalleryBloc>();
+
+  bool showTitle = false;
 
   @override
   void initState() {
-    super.initState();
     scheduleMicrotask(() {
-      scanBloc.add(const ScanPhotoLoadStarted());
+      selectImageFromGalleryBloc.add(const SelectImageFromGalleryLoadStarted());
+      _scrollKey.currentState?.innerController.addListener(_onScroll);
     });
+    super.initState();
   }
 
-  _handleScrollEvent(ScrollNotification scroll) {
-    if (scroll.metrics.pixels / scroll.metrics.maxScrollExtent > 0.33) {
-      if (scanBloc.state.canLoadMore) {
-        scanBloc.add(const ScanPhotoLoadMoreStarted());
-      }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
+  }
+
+  void _onScroll() {
+    final innerController = _scrollKey.currentState?.innerController;
+
+    if (innerController == null || !innerController.hasClients) return;
+
+    final thresholdReached =
+        innerController.position.extentAfter < _endReachedThreshold;
+
+    if (thresholdReached) {
+      // Load more!
+      selectImageFromGalleryBloc.add(SelectImageFromGalleryLoadMoreStarted());
     }
   }
 
@@ -52,6 +73,11 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
         return;
       }
     }
+  }
+
+  void _onSelectPhoto(int photoIndex) {
+    selectImageFromGalleryBloc
+        .add(SelectImageFromGallerySelectChanged(photoIndex: photoIndex));
   }
 
   Future onPickFromGallery() async {
@@ -69,10 +95,6 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      appBar: MainAppBar(
-        appBarTitleText:
-            Text('Scan', style: Theme.of(context).textTheme.headlineMedium),
-      ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 60),
         child: Column(
@@ -124,23 +146,33 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
           ],
         ),
       ),
-      body: SafeArea(
-          bottom: false,
-          child: ScanPhotoStateStatusSelector((status) {
+      body: NestedScrollView(
+          key: _scrollKey,
+          headerSliverBuilder: (_, __) => [
+                const SliverAppBar(
+                  floating: true,
+                  systemOverlayStyle: SystemUiOverlayStyle(
+                    statusBarIconBrightness:
+                        Brightness.dark, //<-- For Android SEE HERE (dark icons)
+                    statusBarBrightness:
+                        Brightness.light, //<-- For iOS SEE HERE (dark icons)
+                  ),
+                  pinned: true,
+                  elevation: 0,
+                  iconTheme: IconThemeData(color: AppColors.black),
+                  backgroundColor: Colors.transparent,
+                ),
+              ],
+          body: SelectImageFromGalleryStateStatusSelector((status) {
             switch (status) {
-              case ScanPhotoStateStatus.loading:
+              case SelectImageFromGalleryStateStatus.loading:
                 return _buildLoading();
-              case ScanPhotoStateStatus.loadingMore:
-                return _buildGrid();
-              case ScanPhotoStateStatus.loadSuccess:
-                return _buildGrid();
-              case ScanPhotoStateStatus.loadFailure:
-                return _buildError();
-              case ScanPhotoStateStatus.loadMoreFailure:
+
+              case SelectImageFromGalleryStateStatus.loadFailure:
                 return _buildError();
 
               default:
-                return Container();
+                return _buildGrid();
             }
           })),
     );
@@ -150,62 +182,70 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
     return const Center(child: Text('Loading....'));
   }
 
-  Widget _buildGrid() {
-    return Column(
-      children: [
-        Expanded(
-            child: NotificationListener<ScrollNotification>(
-                onNotification: (ScrollNotification scroll) {
-                  _handleScrollEvent(scroll);
-
-                  return true;
-                },
-                child: GridView.builder(
-                    padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
-                    itemCount: scanBloc.state.mediaList.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            mainAxisSpacing: 4,
-                            crossAxisSpacing: 4,
-                            crossAxisCount: 3),
-                    itemBuilder: (BuildContext context, int index) {
-                      return FutureBuilder(
-                          future: scanBloc.state.mediaList[index].thumbnailData,
-                          builder: (BuildContext context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return ItemGallery(
-                                onPress: () {
-                                  scanBloc.add(ScanPhotoSelectChanged(
-                                      photoItem:
-                                          scanBloc.state.mediaList[index]));
-                                  AppNavigator.push(Routes.scan_result);
-                                },
-                                asset: scanBloc.state.mediaList[index],
-                                data: snapshot.data as Uint8List,
-                              );
-                            }
-
-                            return Container();
-                          });
-                    }))),
-      ],
-    );
-  }
-
   Widget _buildError() {
     return CustomScrollView(
       slivers: [
+        // PokemonRefreshControl(onRefresh: _onRefresh),
         SliverFillRemaining(
           child: Container(
             padding: const EdgeInsets.only(bottom: 28),
             alignment: Alignment.center,
             child: const Icon(
-              Icons.image_not_supported_outlined,
-              size: 100,
+              Icons.warning_amber_rounded,
+              size: 60,
               color: Colors.black26,
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildGrid() {
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+            sliver: NumberOfPhotoImagesSelector((numberOfMedia) {
+              return SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
+                      crossAxisCount: 3),
+                  delegate: SliverChildBuilderDelegate(
+                    (_, index) {
+                      return SelectImageFromGallerySelector(index, (photo, _) {
+                        return FutureBuilder(
+                            future: photo.thumbnailData,
+                            builder: (BuildContext context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return ItemGallery(
+                                  onPress: () => _onSelectPhoto(index),
+                                  asset: photo,
+                                  data: snapshot.data as Uint8List,
+                                );
+                              }
+
+                              return Container();
+                            });
+                      });
+                    },
+                    childCount: numberOfMedia,
+                  ));
+            })),
+        SliverToBoxAdapter(
+          child: PhotoImageCanLoadMoreSelector((canLoadMore) {
+            if (!canLoadMore) {
+              return const SizedBox.shrink();
+            }
+
+            return Container(
+              padding: const EdgeInsets.only(bottom: 28),
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
+            );
+          }),
         ),
       ],
     );
