@@ -7,8 +7,9 @@ class ScanPhotoState {
   final List<String> dataText;
   final AssetEntity? selectedPhoto;
   final Exception? error;
-
+  final File? pdfFile;
   const ScanPhotoState._({
+    this.pdfFile,
     this.status = ScanPhotoStateStatus.initial,
     this.dataText = const [],
     this.selectedPhoto,
@@ -22,9 +23,10 @@ class ScanPhotoState {
     );
   }
 
-  ScanPhotoState asLoadSuccess(List<String> dataText) {
+  ScanPhotoState asLoadSuccess(List<String> dataText, File file) {
     return copyWith(
       status: ScanPhotoStateStatus.loadSuccess,
+      pdfFile: file,
       dataText: dataText,
     );
   }
@@ -37,12 +39,14 @@ class ScanPhotoState {
   }
 
   ScanPhotoState copyWith({
+    File? pdfFile,
     ScanPhotoStateStatus? status,
     List<String>? dataText,
     final AssetEntity? selectedPhoto,
     Exception? error,
   }) {
     return ScanPhotoState._(
+      pdfFile: pdfFile ?? this.pdfFile,
       status: status ?? this.status,
       dataText: dataText ?? this.dataText,
       selectedPhoto: selectedPhoto ?? this.selectedPhoto,
