@@ -11,18 +11,29 @@ class _ScanResultTextState extends State<ScanResultText> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.0), border: Border.all()),
-      width: double.infinity,
-      height: double.infinity,
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-        child: Text(
-          "A Simple PDF File This is a small demonstration .pdf file - just for use in the Virtual Mechanics tutorials. More text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. Boring, zzzzz. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. And more text. Even more. Continued on page 2 ...",
-          style: TextStyle(height: 1.5),
-        ),
-      ),
-    );
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0), border: Border.all()),
+        width: double.infinity,
+        height: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+          child: CurrentScanDataTextSelector((data) {
+            if (data.isNotEmpty) {
+              String text = data.reduce((value, element) => '$value\n$element');
+
+              return Text(
+                text,
+                style: const TextStyle(height: 1.5),
+              );
+            }
+
+            return Center(
+                child: Text(
+              'Can\'t detect text',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ));
+          }),
+        ));
   }
 }

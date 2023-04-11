@@ -93,9 +93,9 @@ class ElevatedButtonThemeApp {
   static final ElevatedButtonThemeData lightElevatedButtonTheme =
       ElevatedButtonThemeData(
           style: elevatedButtonStyle.merge(OutlinedButton.styleFrom(
-    backgroundColor: AppColors.black,
-    foregroundColor: AppColors.lightGrey,
-  )));
+              backgroundColor: AppColors.black,
+              foregroundColor: AppColors.lightGrey,
+              disabledBackgroundColor: AppColors.grey)));
 
   static final ElevatedButtonThemeData dartElevatedButtonTheme =
       ElevatedButtonThemeData(

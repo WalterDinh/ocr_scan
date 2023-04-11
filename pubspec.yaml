@@ -13,13 +13,14 @@ dependencies:
   cached_network_image: ^3.2.3
   shared_preferences: ^2.0.18
   dio: ^4.0.0
-  dio_http_cache: ^0.3.0
+  # dio_http_cache: ^0.3.0
   pretty_dio_logger: ^1.1.1
   logger: ^1.2.2
   intl: ^0.17.0
   simple_animations: ^5.0.0+3
   flutter_bloc: ^8.1.2
-  json_annotation: ^4.1.0
+  json_annotation: ^4.6.0
+  build_runner: ^2.1.7
   sliding_up_panel: ^2.0.0+1
   image_picker: ^0.8.7
   image_cropper: ^3.0.2
@@ -28,16 +29,14 @@ dependencies:
     sdk: flutter
   bloc: ^8.1.1
   meta: ^1.8.0
-  stream_transform: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
   analyzer: any
   dart_code_metrics: any
   flutter_lints: ^2.0.1
-  json_serializable: ^4.1.4
-  build_runner: ^2.1.11
-
+  stream_transform: ^2.1.0
+  json_serializable: any
 
 flutter:
   generate: true

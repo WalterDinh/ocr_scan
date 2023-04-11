@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -8,7 +10,7 @@ part 'select_image_from_gallery_state.dart';
 
 class SelectImageFromGalleryBloc
     extends Bloc<SelectImageFromGalleryEvent, SelectImageFromGalleryState> {
-  static const int photoPerPage = 20;
+  static const int photoPerPage = 60;
 
   SelectImageFromGalleryBloc()
       : super(const SelectImageFromGalleryState.initial()) {
@@ -19,6 +21,7 @@ class SelectImageFromGalleryBloc
       transformer: (events, mapper) => events.switchMap(mapper),
     );
     on<SelectImageFromGallerySelectChanged>(_onSelectChanged);
+    on<SelectImageFromGallerySetPhoto>(_onSetPhoto);
   }
 
   void _onLoadStarted(SelectImageFromGalleryLoadStarted event,
@@ -64,5 +67,10 @@ class SelectImageFromGalleryBloc
       selectedPhoto: state.mediaList[event.photoIndex],
       selectedIndex: event.photoIndex,
     ));
+  }
+
+  void _onSetPhoto(SelectImageFromGallerySetPhoto event,
+      Emitter<SelectImageFromGalleryState> emit) {
+    emit(state.copyWith(photoScan: event.file));
   }
 }

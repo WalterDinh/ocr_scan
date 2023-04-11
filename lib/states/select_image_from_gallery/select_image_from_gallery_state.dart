@@ -14,6 +14,7 @@ class SelectImageFromGalleryState {
   final SelectImageFromGalleryStateStatus status;
   final List<AssetEntity> mediaList;
   final AssetEntity? selectedPhoto;
+  final File? photoScan;
   final int? selectedIndex;
   final int page;
   final Exception? error;
@@ -23,6 +24,7 @@ class SelectImageFromGalleryState {
       {this.status = SelectImageFromGalleryStateStatus.initial,
       this.mediaList = const [],
       this.selectedPhoto,
+      this.photoScan,
       this.selectedIndex,
       this.page = 0,
       this.error,
@@ -78,6 +80,7 @@ class SelectImageFromGalleryState {
     List<AssetEntity>? mediaList,
     final AssetEntity? selectedPhoto,
     final int? selectedIndex,
+    final File? photoScan,
     int? page,
     bool? canLoadMore,
     Exception? error,
@@ -87,6 +90,7 @@ class SelectImageFromGalleryState {
       mediaList: mediaList ?? this.mediaList,
       selectedIndex: selectedIndex ?? this.selectedIndex,
       selectedPhoto: selectedPhoto ?? this.selectedPhoto,
+      photoScan: photoScan ?? this.photoScan,
       page: page ?? this.page,
       canLoadMore: canLoadMore ?? this.canLoadMore,
       error: error ?? this.error,

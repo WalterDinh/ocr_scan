@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
+// import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:my_app/core/utils.dart';
 
 class NetworkManager {
@@ -10,26 +10,25 @@ class NetworkManager {
   factory NetworkManager() {
     final dio = Dio();
 
-    dio.interceptors.add(DioCacheManager(CacheConfig(
-      defaultMaxAge: Duration(days: 10),
-      maxMemoryCacheCount: 3,
-    )).interceptor);
+    // dio.interceptors.add(DioCacheManager(CacheConfig(
+    //   defaultMaxAge: Duration(days: 10),
+    //   maxMemoryCacheCount: 3,
+    // )).interceptor);
 
     return NetworkManager._(dio);
   }
 
-  Future<Response<T>> request<T>(
-    RequestMethod method,
-    String url, {
-    data,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParameters,
-  }) {
+  Future<Response<T>> request<T>(RequestMethod method, String url,
+      {data,
+      Map<String, dynamic>? headers,
+      Map<String, dynamic>? queryParameters,
+      String? contentType}) {
     return dio.request(
       url,
       data: data,
       queryParameters: queryParameters,
       options: Options(
+        contentType: contentType,
         method: method.value,
         headers: headers,
       ),

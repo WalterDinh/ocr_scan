@@ -34,11 +34,11 @@ class PhotoImageCanLoadMoreSelector
         );
 }
 
-class NumberOfPhotoImagesSelector
-    extends SelectImageFromGalleryStateSelector<int> {
-  NumberOfPhotoImagesSelector(Widget Function(int) builder)
+class PhotoImagesSelector
+    extends SelectImageFromGalleryStateSelector<List<AssetEntity>> {
+  PhotoImagesSelector(Widget Function(List<AssetEntity>) builder)
       : super(
-          selector: (state) => state.mediaList.length,
+          selector: (state) => state.mediaList,
           builder: builder,
         );
 }
