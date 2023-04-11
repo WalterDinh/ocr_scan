@@ -7,7 +7,7 @@ import 'fonts.dart';
 class Theming {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: AppColors.blue,
+    primaryColor: AppColors.darkGreen,
     appBarTheme: const AppBarTheme(
       toolbarTextStyle: TextThemeApp.darkText,
     ),
@@ -24,7 +24,7 @@ class Theming {
 
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: AppColors.blue,
+    primaryColor: AppColors.darkGreen,
     iconTheme: IconThemeApp.iconLightTheme,
     appBarTheme: const AppBarTheme(
       toolbarTextStyle: TextThemeApp.lightText,
