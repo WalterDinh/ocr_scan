@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/configs/images.dart';
+import 'package:my_app/routes.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
 
@@ -14,17 +15,19 @@ class _IntroScreenState extends State<IntroScreen> {
   final PageController _pageViewController = PageController(initialPage: 0);
 
   int _activePage = 0;
+  String _buttonText = 'Continue';
 
   final List<Widget> _pages = [
-    Image(
+    const Image(
       image: AppImages.intro_page1,
       width: double.infinity,
+      fit: BoxFit.cover,
     ),
-    Image(
+    const Image(
       image: AppImages.intro_page2,
       width: double.infinity,
     ),
-    Image(
+    const Image(
       image: AppImages.intro_page3,
       width: double.infinity,
     ),
@@ -37,20 +40,25 @@ class _IntroScreenState extends State<IntroScreen> {
       body: Column(
         children: [
           _buildPageView(),
-          VSpacer(8),
+          const VSpacer(8),
           _buildIndicator(),
-          VSpacer(24),
-          Row(
-            children: [
-              Text('Scanner'),
-            ],
+          const VSpacer(24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text('Scanner'),
+                VSpacer(12),
+                Text(
+                  'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
+                )
+              ],
+            ),
           ),
-          VSpacer(12),
-          Text(
-            'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.',
-          ),
-          VSpacer(32),
+          const VSpacer(32),
           Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24.0),
             width: double.infinity,
             height: 44,
             decoration: BoxDecoration(
@@ -60,26 +68,34 @@ class _IntroScreenState extends State<IntroScreen> {
               ),
             ),
             child: Ripple(
-              onTap: () {},
+              onTap: () => _onPressButtonContinue(),
               rippleRadius: 44,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Continue', style: TextStyle(color: Colors.white)),
+                  Text(_buttonText,
+                      style: const TextStyle(color: Colors.white)),
                 ],
               ),
             ),
           ),
-          VSpacer(4),
-          Ripple(
-            onTap: () {},
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              child: Text('Skip'),
+          const VSpacer(4),
+          Visibility(
+            maintainSize: true,
+            maintainAnimation: true,
+            maintainState: true,
+            visible: _activePage < _pages.length - 1,
+            child: Ripple(
+              onTap: () {
+                AppNavigator.replaceWith(Routes.home);
+              },
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Text('Skip'),
+              ),
             ),
           ),
-          VSpacer(32)
+          const VSpacer(32)
         ],
       ),
     );
@@ -91,6 +107,8 @@ class _IntroScreenState extends State<IntroScreen> {
             onPageChanged: (int index) {
               setState(() {
                 _activePage = index;
+                _buttonText =
+                    index < (_pages.length - 1) ? 'Continue' : 'Finish';
               });
             },
             itemCount: _pages.length,
@@ -112,12 +130,23 @@ class _IntroScreenState extends State<IntroScreen> {
                     curve: Curves.easeIn);
               },
               child: CircleAvatar(
-                radius: 4,
-                backgroundColor:
-                    _activePage == index ? Theme.of(context).primaryColor : Colors.grey,
-              ),
+                  radius: 4,
+                  backgroundColor: _activePage == index
+                      ? Theme.of(context).primaryColor
+                      : Colors.grey),
             ),
           ),
         ),
       );
+
+  void _onPressButtonContinue() {
+    _activePage++;
+    if (_activePage == _pages.length) {
+      AppNavigator.replaceWith(Routes.home);
+    } else {
+      _pageViewController.animateToPage(_activePage,
+          duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+    }
+  }
+
 }

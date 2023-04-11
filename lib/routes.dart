@@ -41,7 +41,7 @@ class AppNavigator {
       case _Paths.scan_result:
         return FadeRoute(page: const ScanResultScreen());
       case _Paths.home:
-        return FadeRoute(page: const ScanResultScreen());
+        return FadeRoute(page: HomeScreen());
       default:
         return FadeRoute(page: const IntroScreen());
     }
