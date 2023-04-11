@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
+import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 
 part 'sections/scan_result_image.dart';
@@ -15,18 +20,25 @@ class ScanResultScreen extends StatefulWidget {
 
 class _ScanResultScreenState extends State<ScanResultScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
+  TabController? _tabController;
+  ScanPhotoBloc get scanPhotoBloc => context.read<ScanPhotoBloc>();
+  SelectImageFromGalleryBloc get selectImageFromGalleryBloc =>
+      context.read<SelectImageFromGalleryBloc>();
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    scheduleMicrotask(() {
+      _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+
+      scanPhotoBloc.add(
+          ScanPhotoLoadStarted(selectImageFromGalleryBloc.state.photoScan));
+    });
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
+    _tabController!.dispose();
   }
 
   @override
@@ -37,24 +49,32 @@ class _ScanResultScreenState extends State<ScanResultScreen>
           child: DefaultTabController(
             length: 2,
             child: Scaffold(
-              appBar: MainAppBar(
-                  backgroundColor: Colors.transparent,
-                  iconTheme:
-                      IconThemeData(color: Theme.of(context).iconTheme.color),
-                  actions: const [
-                    Padding(
-                      padding: EdgeInsets.only(right: 16.0),
-                      child: Center(child: Text("Done")),
-                    )
-                  ]),
-              body: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  _buildTabBar(),
-                  _buildTabContent(),
-                ],
-              ),
-            ),
+                appBar: MainAppBar(
+                    backgroundColor: Colors.transparent,
+                    iconTheme:
+                        IconThemeData(color: Theme.of(context).iconTheme.color),
+                    actions: const [
+                      Padding(
+                        padding: EdgeInsets.only(right: 16.0),
+                        child: Center(child: Text("Done")),
+                      )
+                    ]),
+                body: ScanPhotoStateStatusSelector((status) {
+                  switch (status) {
+                    case ScanPhotoStateStatus.loading:
+                      return Scaffold(
+                        body: _buildLoading(),
+                      );
+
+                    case ScanPhotoStateStatus.loadFailure:
+                      return Scaffold(
+                        body: _buildError(),
+                      );
+
+                    default:
+                      return _buildBody();
+                  }
+                })),
           ),
         ),
         BottomNavigationBar(
@@ -82,6 +102,16 @@ class _ScanResultScreenState extends State<ScanResultScreen>
     );
   }
 
+  Widget _buildBody() {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        _buildTabBar(),
+        _buildTabContent(),
+      ],
+    );
+  }
+
   PreferredSizeWidget _buildTabBar() {
     return PreferredSize(
       preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -93,6 +123,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
           border: Border.all(),
         ),
         child: TabBar(
+          controller: _tabController,
           indicator: BoxDecoration(
             borderRadius: BorderRadius.circular(4.0),
             color: Colors.grey,
@@ -110,13 +141,37 @@ class _ScanResultScreenState extends State<ScanResultScreen>
   }
 
   Widget _buildTabContent() {
-    return const Expanded(
+    return Expanded(
       child: TabBarView(
-        children: [
+        controller: _tabController,
+        children: const [
           ScanResultImage(),
           ScanResultText(),
         ],
       ),
+    );
+  }
+
+  Widget _buildLoading() {
+    return const Center(child: Text('Loading....'));
+  }
+
+  Widget _buildError() {
+    return CustomScrollView(
+      slivers: [
+        // PokemonRefreshControl(onRefresh: _onRefresh),
+        SliverFillRemaining(
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 28),
+            alignment: Alignment.center,
+            child: const Icon(
+              Icons.warning_amber_rounded,
+              size: 60,
+              color: Colors.black26,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

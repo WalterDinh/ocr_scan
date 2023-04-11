@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/routes.dart';
 
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_selector.dart';
@@ -14,6 +16,7 @@ import 'package:my_app/ui/screens/select_photo/widgets/item_gallery.dart';
 import 'package:my_app/ui/widgets/image_picker/image_helper.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class SelectPhotoScreen extends StatefulWidget {
   const SelectPhotoScreen({super.key});
@@ -37,7 +40,10 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
   @override
   void initState() {
     scheduleMicrotask(() {
-      selectImageFromGalleryBloc.add(const SelectImageFromGalleryLoadStarted());
+      if (selectImageFromGalleryBloc.state.mediaList.isEmpty) {
+        selectImageFromGalleryBloc
+            .add(const SelectImageFromGalleryLoadStarted());
+      }
       _scrollKey.currentState?.innerController.addListener(_onScroll);
     });
     super.initState();
@@ -70,8 +76,20 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
     if (file != null) {
       final cropFile = await imageHelper.crop(file: file);
       if (cropFile != null) {
-        return;
+        final File file = File(cropFile.path);
+        selectImageFromGalleryBloc
+            .add(SelectImageFromGallerySetPhoto(file: file));
+        AppNavigator.push(Routes.scan_result);
       }
+    }
+  }
+
+  Future _onNavigateToScan(AssetEntity? assetData) async {
+    File? data = await assetData?.file;
+    if (data != null) {
+      selectImageFromGalleryBloc
+          .add(SelectImageFromGallerySetPhoto(file: data));
+      AppNavigator.push(Routes.scan_result);
     }
   }
 
@@ -86,7 +104,10 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
     if (file != null) {
       final cropFile = await imageHelper.crop(file: file);
       if (cropFile != null) {
-        return;
+        final File file = File(cropFile.path);
+        selectImageFromGalleryBloc
+            .add(SelectImageFromGallerySetPhoto(file: file));
+        AppNavigator.push(Routes.scan_result);
       }
     }
   }
@@ -96,7 +117,7 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
     return Scaffold(
       extendBody: true,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 30),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -175,6 +196,20 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
                 return _buildGrid();
             }
           })),
+      bottomNavigationBar: CurrentSelectedImageSelector(((data) {
+        return Container(
+            decoration: BoxDecoration(color: AppColors.lighterGrey, boxShadow: [
+              BoxShadow(
+                color: AppColors.darkGrey.withOpacity(0.2),
+                offset: const Offset(0, 3),
+                blurRadius: 10,
+              )
+            ]),
+            padding: const EdgeInsets.all(24),
+            child: ElevatedButton(
+                onPressed: data != null ? () => _onNavigateToScan(data) : null,
+                child: const Text('Continnue')));
+      })),
     );
   }
 
@@ -206,32 +241,31 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
       slivers: [
         SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 24),
-            sliver: NumberOfPhotoImagesSelector((numberOfMedia) {
+            sliver: PhotoImagesSelector((listMedia) {
               return SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       mainAxisSpacing: 4,
                       crossAxisSpacing: 4,
                       crossAxisCount: 3),
                   delegate: SliverChildBuilderDelegate(
-                    (_, index) {
-                      return SelectImageFromGallerySelector(index, (photo, _) {
-                        return FutureBuilder(
-                            future: photo.thumbnailData,
-                            builder: (BuildContext context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return ItemGallery(
-                                  onPress: () => _onSelectPhoto(index),
-                                  asset: photo,
-                                  data: snapshot.data as Uint8List,
-                                );
-                              }
+                    (item, index) {
+                      return FutureBuilder(
+                          future: listMedia[index].thumbnailData,
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return ItemGallery(
+                                index: index,
+                                onPress: () => _onSelectPhoto(index),
+                                asset: listMedia[index],
+                                data: snapshot.data as Uint8List,
+                              );
+                            }
 
-                              return Container();
-                            });
-                      });
+                            return Container();
+                          });
                     },
-                    childCount: numberOfMedia,
+                    childCount: listMedia.length,
                   ));
             })),
         SliverToBoxAdapter(
@@ -247,6 +281,7 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
             );
           }),
         ),
+        const SliverToBoxAdapter(child: VSpacer(100)),
       ],
     );
   }

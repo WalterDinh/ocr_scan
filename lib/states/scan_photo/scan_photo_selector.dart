@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
@@ -24,35 +23,11 @@ class ScanPhotoStateStatusSelector
         );
 }
 
-class ScanPhotoCanLoadMoreSelector extends ScanPhotoStateSelector<bool> {
-  ScanPhotoCanLoadMoreSelector(Widget Function(bool) builder)
+class CurrentScanDataTextSelector extends ScanPhotoStateSelector<List<String>> {
+  CurrentScanDataTextSelector(Widget Function(List<String>) builder)
       : super(
-          selector: (state) => state.canLoadMore,
+          selector: (state) => state.dataText,
           builder: builder,
-        );
-}
-
-class NumberOfScanPhotosSelector extends ScanPhotoStateSelector<int> {
-  NumberOfScanPhotosSelector(Widget Function(int) builder)
-      : super(
-          selector: (state) => state.mediaList.length,
-          builder: builder,
-        );
-}
-
-class CurrentScanPhotoSelector extends ScanPhotoStateSelector<AssetEntity?> {
-  CurrentScanPhotoSelector(Widget Function(AssetEntity?) builder)
-      : super(
-          selector: (state) => state.selectedPhoto,
-          builder: builder,
-        );
-}
-
-class ScanPhotoSelector extends ScanPhotoStateSelector<ScanPhotoSelectorState> {
-  ScanPhotoSelector(int index, Widget Function(AssetEntity) builder)
-      : super(
-          selector: (state) => ScanPhotoSelectorState(state.mediaList[index]),
-          builder: (value) => builder(value.photo),
         );
 }
 

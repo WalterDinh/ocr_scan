@@ -31,9 +31,7 @@ class AppNavigator {
     switch (settings.name) {
       case _Paths.select_photo:
         return FadeRoute(
-          page: BlocProvider(
-              create: (context) => SelectImageFromGalleryBloc(),
-              child: const SelectPhotoScreen()),
+          page: const SelectPhotoScreen(),
         );
       case _Paths.scan_result:
         return FadeRoute(page: const ScanResultScreen());

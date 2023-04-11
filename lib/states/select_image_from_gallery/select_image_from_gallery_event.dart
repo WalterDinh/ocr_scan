@@ -17,3 +17,9 @@ class SelectImageFromGallerySelectChanged extends SelectImageFromGalleryEvent {
 
   const SelectImageFromGallerySelectChanged({required this.photoIndex});
 }
+
+class SelectImageFromGallerySetPhoto extends SelectImageFromGalleryEvent {
+  final File file;
+
+  const SelectImageFromGallerySetPhoto({required this.file});
+}
