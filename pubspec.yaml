@@ -47,15 +47,30 @@ flutter:
   assets:
     - assets/images/
   fonts:
-   - family: CircularStd
-     fonts:
-       - asset: assets/fonts/CircularStd-Book.ttf
+    - family: EncodeSans
+      fonts:
+        - asset: assets/fonts/EncodeSans-Regular.ttf
 
-       - asset: assets/fonts/CircularStd-Medium.ttf
-         weight: 600
+        - asset: assets/fonts/EncodeSans-Thin.ttf
+          weight: 100
 
-       - asset: assets/fonts/CircularStd-Black.ttf
-         weight: 700
+        - asset: assets/fonts/EncodeSans-ExtraLight.ttf
+          weight: 200
 
-       - asset: assets/fonts/CircularStd-Bold.ttf
-         weight: 900
+        - asset: assets/fonts/EncodeSans-Light.ttf
+          weight: 300
+
+        - asset: assets/fonts/EncodeSans-Medium.ttf
+          weight: 500
+
+        - asset: assets/fonts/EncodeSans-SemiBold.ttf
+          weight: 600
+
+        - asset: assets/fonts/EncodeSans-Bold.ttf
+          weight: 700
+
+        - asset: assets/fonts/EncodeSans-ExtraBold.ttf
+          weight: 800
+
+        - asset: assets/fonts/EncodeSans-Black.ttf
+          weight: 900

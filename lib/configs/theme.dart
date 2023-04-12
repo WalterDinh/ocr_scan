@@ -146,12 +146,12 @@ class IconThemeApp {
 class TextThemeApp {
   static const TextStyle darkText = TextStyle(
     color: AppColors.whiteGrey,
-    fontFamily: AppFonts.circularStd,
+    fontFamily: AppFonts.encodeSans,
   );
 
   static const TextStyle lightText = TextStyle(
     color: AppColors.black,
-    fontFamily: AppFonts.circularStd,
+    fontFamily: AppFonts.encodeSans,
   );
 
   static const TextStyle headlineLargeText =
