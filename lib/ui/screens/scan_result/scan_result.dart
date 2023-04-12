@@ -6,6 +6,7 @@ import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 part 'sections/scan_result_image.dart';
 

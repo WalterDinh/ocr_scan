@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:my_app/core/pdf.dart';
 import 'package:my_app/data/repositories/scan_repository.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -22,13 +23,16 @@ class ScanPhotoBloc extends Bloc<ScanPhotoEvent, ScanPhotoState> {
     try {
       emit(state.asLoading());
       if (event.filePhoto != null) {
-        print(event.filePhoto);
-
         final dataText =
             await _scanRepository.getTextFromImage(event.filePhoto);
-        print(dataText);
 
-        emit(state.asLoadSuccess(dataText));
+        if (dataText.isNotEmpty) {
+          String text = dataText.reduce((value, element) => '$value\n$element');
+          final pdf = await PdfApi.generateCenteredText(text);
+          emit(state.asLoadSuccess(dataText, pdf));
+        } else {
+          emit(state.asLoadFailure(Exception()));
+        }
       } else {
         emit(state.asLoadFailure(Exception()));
       }
