@@ -18,8 +18,10 @@ class Theming {
     outlinedButtonTheme: OutlinedButtonThemeApp.dartOutlinedButtonTheme,
     elevatedButtonTheme: ElevatedButtonThemeApp.dartElevatedButtonTheme,
     scaffoldBackgroundColor: AppColors.black,
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
-        .copyWith(background: AppColors.black, brightness: Brightness.dark),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
+        background: AppColors.black,
+        brightness: Brightness.dark,
+        outline: AppColors.semiGrey),
   );
 
   static final ThemeData lightTheme = ThemeData(
@@ -34,9 +36,11 @@ class Theming {
     outlinedButtonTheme: OutlinedButtonThemeApp.lightOutlinedButtonTheme,
     elevatedButtonTheme: ElevatedButtonThemeApp.lightElevatedButtonTheme,
     textTheme: TextThemeApp.lightTextTheme,
-    scaffoldBackgroundColor: AppColors.lightGrey,
+    scaffoldBackgroundColor: Colors.white,
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
-        background: AppColors.whiteGrey, brightness: Brightness.light),
+        background: AppColors.whiteGrey,
+        brightness: Brightness.light,
+        outline: AppColors.semiGrey),
   );
 }
 
@@ -169,11 +173,11 @@ class TextThemeApp {
       TextStyle(fontSize: 13, height: 13 / 16, fontWeight: FontWeight.w400);
 
   static const TextStyle labelLargeText =
-      TextStyle(fontSize: 15, height: 4 / 3, fontWeight: FontWeight.w600);
+      TextStyle(fontSize: 16, height: 20 / 16, fontWeight: FontWeight.w600);
   static const TextStyle labelMediumText =
       TextStyle(fontSize: 14, height: 9 / 7, fontWeight: FontWeight.w500);
   static const TextStyle labelSmallText =
-      TextStyle(fontSize: 13, height: 13 / 16, fontWeight: FontWeight.w400);
+      TextStyle(fontSize: 12, height: 15 / 12, fontWeight: FontWeight.w400);
 
   static const TextStyle displayLargeText =
       TextStyle(fontSize: 15, height: 4 / 3, fontWeight: FontWeight.w600);

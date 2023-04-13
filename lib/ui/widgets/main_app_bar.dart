@@ -102,7 +102,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   final PreferredSizeWidget? bottom;
   final Color? backgroundColor;
   final IconThemeData? iconTheme;
-
+  final Widget? leading;
   MainAppBar({
     Key? key,
     this.appBarTitleText,
@@ -112,6 +112,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     this.bottom,
     this.backgroundColor = Colors.transparent,
     this.iconTheme,
+    this.leading,
   }) : super(key: key);
 
   @override
@@ -135,7 +136,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
               icon: Icon(Icons.arrow_back_ios_new),
               onPressed: AppNavigator.pop,
             )
-          : null,
+          : leading,
       automaticallyImplyLeading: isBackButtonEnabled,
       actions: actions,
       iconTheme:

@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
+import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/ui/widgets/dropdown_button_icon.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
+
+List<DropdownItem> listMenu = [
+  DropdownItem(
+      name: 'Move to',
+      tag: 'move',
+      icon: SvgPicture.asset(
+        AppImages.iconMove,
+        width: AppValues.iconSize_20,
+        height: AppValues.iconSize_20,
+      )),
+  DropdownItem(
+      name: 'Delete',
+      tag: 'delete',
+      icon: SvgPicture.asset(
+        AppImages.iconDelete,
+        width: AppValues.iconSize_20,
+        height: AppValues.iconSize_20,
+      ))
+];
 
 class ItemScanHistory extends StatelessWidget {
   final String fileName;
   final String dateTime;
   final String pathUrl;
-  final Function() onDownLoad;
+  final Function() onEdit;
   final Function() onShare;
   final Function() onShowMoreOption;
   final Function()? onPressItem;
@@ -17,7 +40,7 @@ class ItemScanHistory extends StatelessWidget {
       required this.fileName,
       required this.dateTime,
       required this.pathUrl,
-      required this.onDownLoad,
+      required this.onEdit,
       required this.onShare,
       required this.onShowMoreOption,
       this.onPressItem});
@@ -28,25 +51,18 @@ class ItemScanHistory extends StatelessWidget {
       onTap: onPressItem,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 1,
-                  offset: const Offset(1, 3))
-            ]),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Row(
             children: [
               Expanded(
                   child: Row(
                 children: [
                   Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.darkGrey, width: 1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Image(
@@ -56,11 +72,9 @@ class ItemScanHistory extends StatelessWidget {
                       image: AppImages.logo,
                     ),
                   ),
-                  _buildInfoScanHistory()
+                  _buildInfoScanHistory(context)
                 ],
               )),
-              Ripple(
-                  onTap: onShowMoreOption, child: const Icon(Icons.more_vert))
             ],
           ),
         ),
@@ -68,37 +82,66 @@ class ItemScanHistory extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoScanHistory() {
+  Widget _buildInfoScanHistory(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              fileName,
-              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
-            ),
-            Text(
-              dateTime,
-              style: const TextStyle(fontSize: 12),
-            ),
-            const VSpacer(8),
-            Row(
-              children: [
-                Ripple(
-                  onTap: onDownLoad,
-                  child: const Icon(Icons.download),
-                ),
-                const HSpacer(8),
-                Ripple(
-                  onTap: onShare,
-                  child: const Icon(Icons.share),
-                )
-              ],
-            ),
+      child: Container(
+        decoration: const BoxDecoration(
+            border: Border(bottom: BorderSide(color: AppColors.whiteGrey))),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 18),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'ca skjc cmsalkmclmasmcklasmckmsalmclkcmsamkcsakjcnsakjcasml',
+                    style: Theme.of(context).textTheme.labelLarge,
+                    maxLines: 2,
+                  ),
+                  const VSpacer(12),
+                  Text(
+                    dateTime,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ],
+              ),
+            )),
+            _buildIconButton()
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildIconButton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4.0),
+      child: Row(
+        children: [
+          Ripple(
+            onTap: onEdit,
+            child: SvgPicture.asset(
+              AppImages.iconEdit,
+              width: AppValues.iconSize_20,
+              height: AppValues.iconSize_20,
+            ),
+          ),
+          const HSpacer(20),
+          Ripple(
+            onTap: onShare,
+            child: SvgPicture.asset(
+              AppImages.iconShare,
+              width: AppValues.iconSize_20,
+              height: AppValues.iconSize_20,
+            ),
+          ),
+          const HSpacer(20),
+          PopUpMenuButtonIcon(listButton: listMenu),
+        ],
       ),
     );
   }
