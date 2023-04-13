@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PdfApi {
   static Future<File> generateCenteredText(String text) async {
@@ -36,5 +37,14 @@ class PdfApi {
 
     // reterning the file to the top most method which is generate centered text.
     return file;
+  }
+
+  static Future shareDocument({
+    required String name,
+  }) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final filePath = '${dir.path}/$name';
+
+    await Share.shareXFiles([XFile(filePath)]);
   }
 }

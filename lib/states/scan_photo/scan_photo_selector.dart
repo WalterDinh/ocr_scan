@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_app/core/base/pair.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:photo_manager/photo_manager.dart';
 
@@ -39,6 +40,13 @@ class CurrentScanDataPDFSelector extends ScanPhotoStateSelector<File?> {
           selector: (state) => state.pdfFile,
           builder: builder,
         );
+}
+
+class CurrentScanDataSelector extends ScanPhotoStateSelector<Pair> {
+  CurrentScanDataSelector(Widget Function(Pair) builder)
+      : super(
+            selector: (state) => Pair(state.dataText, state.pdfFile),
+            builder: builder);
 }
 
 class ScanPhotoSelectorState {
