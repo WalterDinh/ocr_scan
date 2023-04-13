@@ -17,9 +17,10 @@ class ListScanHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Expanded(
         child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ListView.builder(
               shrinkWrap: true,
+              padding: const EdgeInsets.only(bottom: 80),
               physics: const AlwaysScrollableScrollPhysics(),
               itemCount: _listScanHistory.length,
               itemBuilder: (context, index) {
