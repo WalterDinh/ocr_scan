@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:my_app/configs/images.dart';
+import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/ui/screens/home/widgets/search_input.dart';
 import 'package:my_app/ui/widgets/item_scan_folder.dart';
@@ -23,43 +26,49 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildHomeAppBar(context),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const SearchInput(hintText: 'Search'),
-            _buildSectionHeader('My scan folder', () {}),
-            ListScanFolder(listScanFolder: _listScanFolder),
-            _buildSectionHeader('Scan history', () {}),
-            ListScanHistory(
-              listScanHistory: _listScanHistory,
-            )
-          ],
-        ),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const SearchInput(hintText: 'Search...'),
+          _buildSectionHeader('My scan folder', () {}, context),
+          ListScanFolder(listScanFolder: _listScanFolder),
+          _buildSectionHeader('Scan history', () {}, context),
+          ListScanHistory(
+            listScanHistory: _listScanHistory,
+          )
+        ],
       ),
-      floatingActionButton: _buildFabScan(),
+      floatingActionButton: _buildFabScan(context),
     );
   }
 
   PreferredSizeWidget _buildHomeAppBar(BuildContext context) => MainAppBar(
-        appBarTitleText: Text('Document Scan',
-            style: Theme.of(context).textTheme.headlineMedium),
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
         isBackButtonShowed: false,
       );
 
-  Widget _buildSectionHeader(String title, Function() onPress) => Padding(
-      padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 8.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Text(title, style: const TextStyle(fontSize: 18)),
-        Ripple(
-          onTap: onPress,
-          child: const Text("See more"),
-        ),
-      ]));
+  Widget _buildSectionHeader(
+          String title, Function() onPress, BuildContext context) =>
+      Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 16.0),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.labelLarge),
+                Ripple(
+                  onTap: onPress,
+                  child: Text("See more",
+                      style: Theme.of(context).textTheme.labelSmall),
+                ),
+              ]));
 
-  Widget _buildFabScan() => FloatingActionButton(
-        child: const Icon(
-          Icons.document_scanner_outlined,
+  Widget _buildFabScan(BuildContext context) => FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: SvgPicture.asset(
+          AppImages.iconScan,
+          width: AppValues.iconDefaultSize,
+          height: AppValues.iconDefaultSize,
         ),
         onPressed: () => _onFabScanPressed(),
       );
