@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_app/configs/colors.dart';
+import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/utils/size.dart';
 
-const double mainAppBarPadding = 28;
+const double mainAppBarPadding = 16;
 
 class MainSliverAppBar extends SliverAppBar {
   static const TextStyle _textStyle = TextStyle(
@@ -103,6 +105,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
   final Color? backgroundColor;
   final IconThemeData? iconTheme;
   final Widget? leading;
+  final double? leadingWidth;
   MainAppBar({
     Key? key,
     this.appBarTitleText,
@@ -113,6 +116,7 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
     this.backgroundColor = Colors.transparent,
     this.iconTheme,
     this.leading,
+    this.leadingWidth,
   }) : super(key: key);
 
   @override
@@ -132,13 +136,18 @@ class MainAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       leading: isBackButtonShowed
           ? const IconButton(
-              padding: EdgeInsets.symmetric(horizontal: mainAppBarPadding),
-              icon: Icon(Icons.arrow_back_ios_new),
+              splashRadius: AppValues.iconSize_20,
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: AppColors.black,
+              ),
               onPressed: AppNavigator.pop,
             )
           : leading,
+      titleSpacing: 0,
       automaticallyImplyLeading: isBackButtonEnabled,
       actions: actions,
+      leadingWidth: leadingWidth,
       iconTheme:
           iconTheme ?? IconThemeData(color: Theme.of(context).iconTheme.color),
       title: appBarTitleText,

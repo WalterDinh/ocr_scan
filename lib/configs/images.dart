@@ -11,6 +11,7 @@ class AppImages {
   static const intro_page1 = _Image('intro_page1.png');
   static const intro_page2 = _Image('intro_page2.png');
   static const intro_page3 = _Image('intro_page3.png');
+  static const defaultFileImage = _Image('default_file_image.png');
   static const iconFolder = '$_imagePath/folder.svg';
   static const iconEdit = '$_imagePath/icon_edit.svg';
   static const iconShare = '$_imagePath/icon_share.svg';
@@ -20,6 +21,8 @@ class AppImages {
   static const iconMove = '$_imagePath/icon_move.svg';
   static const iconDelete = '$_imagePath/icon_delete.svg';
   static const iconFolderAdd = '$_imagePath/folder_add.svg';
+  static const iconSearchEmpty = '$_imagePath/icon_search_empty.svg';
+  static const iconNoSearchResult = '$_imagePath/icon_no_search_result.svg';
 
   static Future precacheAssets(BuildContext context) async {
     await precacheImage(logo, context);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/routes.dart';
@@ -22,6 +23,10 @@ class HomeScreen extends StatelessWidget {
     AppNavigator.push(Routes.select_photo);
   }
 
+  _onPressInputSearch() {
+    AppNavigator.push(Routes.search);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +34,13 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          const SearchInput(hintText: 'Search...'),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SearchInput(
+              hintText: 'Search...',
+              onPressInput: _onPressInputSearch,
+            ),
+          ),
           _buildSectionHeader('My scan folder', () {}, context),
           ListScanFolder(listScanFolder: _listScanFolder),
           _buildSectionHeader('Scan history', () {}, context),
@@ -43,7 +54,12 @@ class HomeScreen extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildHomeAppBar(BuildContext context) => MainAppBar(
-        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+        leading: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.menu,
+              color: AppColors.black,
+            )),
         isBackButtonShowed: false,
       );
 
