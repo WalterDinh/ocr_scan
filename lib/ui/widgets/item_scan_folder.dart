@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:my_app/configs/images.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
 
-const ICON_SIZE = 56.0;
+const ICON_SIZE = 26.0;
 
 class ItemScanFolder extends StatelessWidget {
   final String folderName;
   final Function() onPressFolder;
-
+  final bool isAddButton;
   const ItemScanFolder(
-      {super.key, required this.folderName, required this.onPressFolder});
+      {super.key,
+      required this.folderName,
+      required this.onPressFolder,
+      required this.isAddButton});
 
   @override
   Widget build(BuildContext context) {
@@ -21,23 +26,23 @@ class ItemScanFolder extends StatelessWidget {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset: const Offset(0, 3))
-                  ]),
+                  border: Border.all(
+                      color: Theme.of(context).colorScheme.outline, width: 1)),
               margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              width: ICON_SIZE,
-              height: ICON_SIZE,
-              child: const Icon(
-                Icons.folder,
-                size: 28,
-                color: Colors.blue,
+              padding: const EdgeInsets.all(16),
+              child: SvgPicture.asset(
+                isAddButton ? AppImages.iconFolderAdd : AppImages.iconFolder,
+                width: ICON_SIZE,
+                height: ICON_SIZE,
               )),
-          const VSpacer(4),
-          Text(folderName)
+          const VSpacer(8),
+          Text(
+            folderName,
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall
+                ?.copyWith(fontWeight: FontWeight.w600),
+          )
         ],
       ),
     );

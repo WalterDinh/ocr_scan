@@ -1,5 +1,7 @@
 part of '../home.dart';
 
+double LIST_HEIGHT = 86.0;
+
 class ListScanFolder extends StatelessWidget {
   const ListScanFolder({
     super.key,
@@ -12,13 +14,16 @@ class ListScanFolder extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
       child: SizedBox(
-        height: 80.0,
+        height: LIST_HEIGHT,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: _listScanFolder.length,
           itemBuilder: (context, index) {
+            bool isAddButton = index == 0;
+
             return ItemScanFolder(
-              folderName: 'Folder$index',
+              isAddButton: isAddButton,
+              folderName: isAddButton ? 'Create new' : 'Folder$index',
               onPressFolder: () {},
             );
           },
