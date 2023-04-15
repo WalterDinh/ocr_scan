@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:my_app/core/pdf.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
@@ -15,6 +16,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../core/base/pair.dart';
 
 part 'sections/scan_result_image.dart';
+
 part 'sections/scan_result_text.dart';
 
 class ScanResultScreen extends StatefulWidget {
@@ -213,7 +215,11 @@ class _ScanResultScreenState extends State<ScanResultScreen>
               onTakeMimeType: (mimetype) {
                 switch (mimetype) {
                   case MimeType.pdf:
-                    // TODO: Handle this case.
+                    // PdfApi.copyFileDocumentToExternalStorage(file: data.second);
+                    List<String> dataText = data.first as List<String>;
+                    String dataConverted =
+                        dataText.reduce((value, element) => '$value\n$element');
+                    PdfApi.saveDocumentToExternal(text: dataConverted, fileInput: data.second);
                     break;
                   case MimeType.txt:
                     // TODO: Handle this case.
