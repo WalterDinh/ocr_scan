@@ -166,7 +166,7 @@ class TextThemeApp {
       TextStyle(fontSize: 14, height: 10 / 7, fontWeight: FontWeight.w600);
 
   static const TextStyle bodyLargeText =
-      TextStyle(fontSize: 15, height: 4 / 3, fontWeight: FontWeight.w600);
+      TextStyle(fontSize: 16, height: 5 / 4, fontWeight: FontWeight.w600);
   static const TextStyle bodyMediumText =
       TextStyle(fontSize: 14, height: 9 / 7, fontWeight: FontWeight.w500);
   static const TextStyle bodySmallText =

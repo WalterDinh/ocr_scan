@@ -59,17 +59,11 @@ class ItemScanHistory extends StatelessWidget {
                   child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.darkGrey, width: 1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    margin: const EdgeInsets.only(bottom: 12),
                     child: const Image(
                       width: 56,
                       height: 64,
-                      fit: BoxFit.cover,
-                      image: AppImages.logo,
+                      image: AppImages.defaultFileImage,
                     ),
                   ),
                   _buildInfoScanHistory(context)
