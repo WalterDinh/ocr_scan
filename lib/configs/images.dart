@@ -23,6 +23,11 @@ class AppImages {
   static const iconFolderAdd = '$_imagePath/folder_add.svg';
   static const iconSearchEmpty = '$_imagePath/icon_search_empty.svg';
   static const iconNoSearchResult = '$_imagePath/icon_no_search_result.svg';
+  static const iconHelpCircle = '$_imagePath/icon_help_circle.svg';
+  static const iconPage = '$_imagePath/icon_page.svg';
+  static const iconPrivacy = '$_imagePath/icon_privacy.svg';
+  static const iconStar = '$_imagePath/icon_star.svg';
+  static const iconTranslate = '$_imagePath/icon_translate.svg';
 
   static Future precacheAssets(BuildContext context) async {
     await precacheImage(logo, context);

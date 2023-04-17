@@ -8,6 +8,7 @@ import 'package:my_app/ui/screens/home/widgets/search_input.dart';
 import 'package:my_app/ui/widgets/item_scan_folder.dart';
 import 'package:my_app/ui/widgets/item_scan_history.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
+import 'package:my_app/ui/widgets/spacer.dart';
 
 import '../../widgets/main_app_bar.dart';
 part 'sections/list_folder.dart';
@@ -33,6 +34,10 @@ class HomeScreen extends StatelessWidget {
 
   _onNavigateToScanHistory() {
     AppNavigator.push(Routes.scan_history);
+  }
+
+  _onNavigateToSetting() {
+    AppNavigator.push(Routes.setting);
   }
 
   @override
@@ -63,12 +68,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildHomeAppBar(BuildContext context) => MainAppBar(
-        leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.menu,
-              color: AppColors.black,
-            )),
+        actions: [
+          IconButton(
+              onPressed: _onNavigateToSetting,
+              icon: const Icon(
+                Icons.settings,
+                size: AppValues.iconSize_22,
+                color: AppColors.black,
+              )),
+          const HSpacer(8)
+        ],
         isBackButtonShowed: false,
       );
 

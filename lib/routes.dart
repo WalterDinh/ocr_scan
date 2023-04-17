@@ -8,6 +8,7 @@ import 'package:my_app/ui/screens/scan_result/scan_result.dart';
 import 'package:my_app/ui/screens/search/search.dart';
 import 'package:my_app/ui/screens/select_photo/select_photo.dart';
 import 'package:my_app/ui/screens/home/home.dart';
+import 'package:my_app/ui/screens/setting/setting.dart';
 
 enum Routes {
   splash,
@@ -18,7 +19,8 @@ enum Routes {
   search,
   move_file,
   my_folder,
-  scan_history
+  scan_history,
+  setting
 }
 
 class _Paths {
@@ -31,6 +33,7 @@ class _Paths {
   static const String move_file = '/move_file';
   static const String my_folder = '/my_folder';
   static const String scan_history = '/scan_history';
+  static const String setting = '/setting';
 
   static const Map<Routes, String> _pathMap = {
     Routes.splash: _Paths.splash,
@@ -42,6 +45,7 @@ class _Paths {
     Routes.move_file: _Paths.move_file,
     Routes.my_folder: _Paths.my_folder,
     Routes.scan_history: _Paths.scan_history,
+    Routes.setting: _Paths.setting,
   };
 
   static String of(Routes route) => _pathMap[route] ?? splash;
@@ -68,6 +72,8 @@ class AppNavigator {
         return FadeRoute(page: const MyFolderScreen());
       case _Paths.scan_history:
         return FadeRoute(page: const ScanHistoryScreen());
+      case _Paths.setting:
+        return FadeRoute(page: const SettingScreen());
       default:
         return FadeRoute(page: const IntroScreen());
     }
