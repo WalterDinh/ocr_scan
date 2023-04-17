@@ -12,7 +12,11 @@ class ListScanHistory extends StatelessWidget {
 
   _onShare() {}
 
-  _onShowMoreOptions() {}
+  _onHandleOptions(HistoryOptionType item) {
+    if (item == HistoryOptionType.move) {
+      AppNavigator.push(Routes.move_file);
+    }
+  }
 
   @override
   Widget build(BuildContext context) => Expanded(
@@ -25,12 +29,12 @@ class ListScanHistory extends StatelessWidget {
               itemCount: _listScanHistory.length,
               itemBuilder: (context, index) {
                 return ItemScanHistory(
+                  onPressOption: (item) => _onHandleOptions(item),
                   onPressItem: () {},
-                  dateTime: '12-9-1999',
-                  fileName: '123123',
+                  dateTime: '700 MB 04/04/2022',
+                  fileName: 'Scan documents',
                   onEdit: _onEdit,
                   onShare: _onShare,
-                  onShowMoreOption: _onShowMoreOptions,
                   pathUrl: '',
                 );
               },
