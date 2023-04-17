@@ -59,17 +59,22 @@ class _MyFolderScreenState extends State<MyFolderScreen> {
     );
   }
 
-  Widget _buildFabScan(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 60.0),
-        child: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: SvgPicture.asset(
-            AppImages.iconFolderAdd,
-            width: AppValues.iconDefaultSize,
-            height: AppValues.iconDefaultSize,
-            color: AppColors.lighterGrey,
-          ),
-          onPressed: () => _onOpenModalCreateFolder(),
+  Widget _buildFabScan(BuildContext context) {
+    double paddingBottomFloadButton =
+        16 + MediaQuery.of(context).viewPadding.bottom;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: paddingBottomFloadButton),
+      child: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: SvgPicture.asset(
+          AppImages.iconFolderAdd,
+          width: AppValues.iconDefaultSize,
+          height: AppValues.iconDefaultSize,
+          color: AppColors.lighterGrey,
         ),
-      );
+        onPressed: () => _onOpenModalCreateFolder(),
+      ),
+    );
+  }
 }
