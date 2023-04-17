@@ -162,7 +162,7 @@ class TextThemeApp {
   static const TextStyle headlineLargeText =
       TextStyle(fontSize: 32, height: 1.2, fontWeight: FontWeight.w700);
   static const TextStyle headlineMediumText =
-      TextStyle(fontSize: 22, height: 14 / 11, fontWeight: FontWeight.w700);
+      TextStyle(fontSize: 20, height: 25 / 20, fontWeight: FontWeight.w700);
   static const TextStyle headlineSmallText =
       TextStyle(fontSize: 14, height: 10 / 7, fontWeight: FontWeight.w600);
 
