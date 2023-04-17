@@ -101,8 +101,6 @@ class _ScanResultScreenState extends State<ScanResultScreen>
               onTap: (value) => _onTapBottomNavItem(value, data),
               items: const [
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.rotate_left_outlined), label: "Rotate"),
-                BottomNavigationBarItem(
                     icon: Icon(Icons.download), label: "Download"),
                 BottomNavigationBarItem(
                     icon: Icon(Icons.ios_share), label: "Share"),
@@ -219,7 +217,8 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                     List<String> dataText = data.first as List<String>;
                     String dataConverted =
                         dataText.reduce((value, element) => '$value\n$element');
-                    PdfApi.saveDocumentToExternal(text: dataConverted, fileInput: data.second);
+                    PdfApi.saveDocumentToExternal(
+                        text: dataConverted, fileInput: data.second);
                     break;
                   case MimeType.txt:
                     // TODO: Handle this case.
@@ -228,7 +227,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                     // TODO: Handle this case.
                     break;
                 }
-                if (context.mounted) {
+                if (mounted) {
                   Navigator.pop(context);
                 }
               },
@@ -256,7 +255,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                     // TODO: Handle this case.
                     break;
                 }
-                if (context.mounted) {
+                if (mounted) {
                   Navigator.pop(context);
                 }
               },
