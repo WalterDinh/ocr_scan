@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/ui/modals/create_folder_modal.dart';
 import 'package:my_app/ui/widgets/item_my_folder_list.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
@@ -28,7 +29,17 @@ class _MyFolderScreenState extends State<MyFolderScreen> {
     super.initState();
   }
 
-  void _onOpenModalCreateFolder() {}
+  void _onOpenModalCreateFolder() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ModalCreateFolder(
+          onSummit: (text) => {},
+          initialValue: 'New folder_04_07_2023',
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
