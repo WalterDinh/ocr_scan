@@ -1,12 +1,19 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:my_app/core/pdf.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
+import 'package:my_app/ui/screens/scan_result/widgets/select_mimetype_modal.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../../../core/base/pair.dart';
 
 part 'sections/scan_result_image.dart';
 
@@ -22,9 +29,12 @@ class ScanResultScreen extends StatefulWidget {
 class _ScanResultScreenState extends State<ScanResultScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+
   ScanPhotoBloc get scanPhotoBloc => context.read<ScanPhotoBloc>();
+
   SelectImageFromGalleryBloc get selectImageFromGalleryBloc =>
       context.read<SelectImageFromGalleryBloc>();
+
   @override
   void initState() {
     scheduleMicrotask(() {
@@ -78,26 +88,31 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                 })),
           ),
         ),
-        BottomNavigationBar(
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          selectedItemColor: Colors.grey,
-          type: BottomNavigationBarType.fixed,
-          unselectedItemColor: Colors.grey,
-          unselectedLabelStyle: const TextStyle(color: Colors.grey),
-          selectedLabelStyle: const TextStyle(color: Colors.grey),
-          items: const [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.rotate_left_outlined), label: "Rotate"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.download), label: "Download"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.ios_share), label: "Share"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.change_circle_outlined), label: "Convert"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.more_horiz_outlined), label: "More"),
-          ],
+        CurrentScanDataSelector(
+          (data) {
+            return BottomNavigationBar(
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              selectedItemColor: Colors.grey,
+              type: BottomNavigationBarType.fixed,
+              unselectedItemColor: Colors.grey,
+              unselectedLabelStyle: const TextStyle(color: Colors.grey),
+              selectedLabelStyle: const TextStyle(color: Colors.grey),
+              onTap: (value) => _onTapBottomNavItem(value, data),
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.rotate_left_outlined), label: "Rotate"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.download), label: "Download"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.ios_share), label: "Share"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.change_circle_outlined), label: "Convert"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.more_horiz_outlined), label: "More"),
+              ],
+            );
+          },
         )
       ],
     );
@@ -174,5 +189,77 @@ class _ScanResultScreenState extends State<ScanResultScreen>
         ),
       ],
     );
+  }
+
+  void _onTapBottomNavItem(int index, Pair data) async {
+    switch (index) {
+      case 1:
+        var status = await Permission.storage.status;
+        if (status.isGranted) {
+          _onShowDownloadFileModal(data);
+        } else {
+          Permission.storage.request();
+        }
+        break;
+      case 2:
+        _onShowShareFileModal(data);
+        break;
+    }
+  }
+
+  void _onShowDownloadFileModal(Pair data) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => SelectMimeTypeModal(
+              title: 'Download file',
+              onTakeMimeType: (mimetype) {
+                switch (mimetype) {
+                  case MimeType.pdf:
+                    // PdfApi.copyFileDocumentToExternalStorage(file: data.second);
+                    List<String> dataText = data.first as List<String>;
+                    String dataConverted =
+                        dataText.reduce((value, element) => '$value\n$element');
+                    PdfApi.saveDocumentToExternal(text: dataConverted, fileInput: data.second);
+                    break;
+                  case MimeType.txt:
+                    // TODO: Handle this case.
+                    break;
+                  case MimeType.image:
+                    // TODO: Handle this case.
+                    break;
+                }
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+            ));
+  }
+
+  void _onShowShareFileModal(Pair data) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) => SelectMimeTypeModal(
+              title: 'Share file',
+              onTakeMimeType: (mimetype) async {
+                switch (mimetype) {
+                  case MimeType.pdf:
+                    File file = data.second as File;
+                    Share.shareXFiles([XFile(file.path)]);
+                    break;
+                  case MimeType.txt:
+                    List<String> dataText = data.first as List<String>;
+                    String dataConverted =
+                        dataText.reduce((value, element) => '$value\n$element');
+                    Share.share(dataConverted);
+                    break;
+                  case MimeType.image:
+                    // TODO: Handle this case.
+                    break;
+                }
+                if (context.mounted) {
+                  Navigator.pop(context);
+                }
+              },
+            ));
   }
 }
