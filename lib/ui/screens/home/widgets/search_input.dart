@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/ui/widgets/ripple.dart';
 
 class SearchInput extends StatelessWidget {
   const SearchInput({
@@ -18,38 +19,41 @@ class SearchInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: TextField(
-        onTap: onPressInput,
-        decoration: InputDecoration(
-            filled: true,
-            fillColor: AppColors.lightGreen,
-            contentPadding: const EdgeInsets.symmetric(vertical: 10),
-            hintText: hintText,
-            hintStyle: Theme.of(context)
-                .textTheme
-                .labelLarge!
-                .copyWith(color: Colors.grey, fontWeight: FontWeight.w400),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            prefixIcon: IconButton(
-              icon: SvgPicture.asset(
-                AppImages.iconSearch,
-                width: AppValues.iconSize_20,
-                height: AppValues.iconSize_20,
+    return Ripple(
+      onTap: onPressInput,
+      child: Material(
+        child: TextField(
+          enabled: onPressInput == null,
+          decoration: InputDecoration(
+              filled: true,
+              fillColor: AppColors.lightGreen,
+              contentPadding: const EdgeInsets.symmetric(vertical: 10),
+              hintText: hintText,
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Colors.grey, fontWeight: FontWeight.w400),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide.none,
               ),
-              onPressed: onPressIconSearch,
-            )),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide.none,
+              ),
+              prefixIcon: IconButton(
+                icon: SvgPicture.asset(
+                  AppImages.iconSearch,
+                  width: AppValues.iconSize_20,
+                  height: AppValues.iconSize_20,
+                ),
+                onPressed: onPressIconSearch,
+              )),
+        ),
       ),
     );
   }
