@@ -13,21 +13,17 @@ class DropdownItem {
   DropdownItem({required this.name, required this.tag, required this.icon});
 }
 
-class PopUpMenuButtonIcon extends StatefulWidget {
-  const PopUpMenuButtonIcon({super.key, required this.listButton, this.icon});
+class PopUpMenuButtonIcon extends StatelessWidget {
+  const PopUpMenuButtonIcon(
+      {super.key, required this.listButton, this.icon, required this.onPress});
   final List<DropdownItem> listButton;
   final Widget? icon;
-  @override
-  State<PopUpMenuButtonIcon> createState() => _PopUpMenuButtonIconState();
-}
-
-class _PopUpMenuButtonIconState extends State<PopUpMenuButtonIcon> {
-  DropdownItem? currentItem;
+  final Function(DropdownItem) onPress;
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<DropdownItem>(
         splashRadius: AppValues.iconSize_20,
-        icon: widget.icon ??
+        icon: icon ??
             SvgPicture.asset(
               AppImages.iconMore,
               width: AppValues.iconSize_20,
@@ -39,8 +35,8 @@ class _PopUpMenuButtonIconState extends State<PopUpMenuButtonIcon> {
           ),
         ),
         position: PopupMenuPosition.over,
-        onSelected: (DropdownItem item) {},
-        itemBuilder: (BuildContext context) => widget.listButton
+        onSelected: (value) => onPress(value),
+        itemBuilder: (BuildContext context) => listButton
             .map(
               (e) => PopupMenuItem<DropdownItem>(
                 value: e,

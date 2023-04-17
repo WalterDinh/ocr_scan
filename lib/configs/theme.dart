@@ -88,16 +88,17 @@ class TextButtonThemeApp {
 
 class ElevatedButtonThemeApp {
   static ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
-      padding: const EdgeInsets.all(16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      textStyle: const TextStyle(fontWeight: FontWeight.w700));
+    padding: const EdgeInsets.all(16),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(40.0),
+    ),
+    textStyle: TextThemeApp.labelMediumText,
+  );
 
   static final ElevatedButtonThemeData lightElevatedButtonTheme =
       ElevatedButtonThemeData(
           style: elevatedButtonStyle.merge(OutlinedButton.styleFrom(
-              backgroundColor: AppColors.black,
+              backgroundColor: AppColors.darkGreen,
               foregroundColor: AppColors.lightGrey,
               disabledBackgroundColor: AppColors.grey)));
 

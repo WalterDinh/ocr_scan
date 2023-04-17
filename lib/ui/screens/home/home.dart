@@ -27,6 +27,14 @@ class HomeScreen extends StatelessWidget {
     AppNavigator.push(Routes.search);
   }
 
+  _onNavigateToMyFolder() {
+    AppNavigator.push(Routes.my_folder);
+  }
+
+  _onNavigateToScanHistory() {
+    AppNavigator.push(Routes.scan_history);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,9 +49,10 @@ class HomeScreen extends StatelessWidget {
               onPressInput: _onPressInputSearch,
             ),
           ),
-          _buildSectionHeader('My scan folder', () {}, context),
+          _buildSectionHeader('My scan folder', _onNavigateToMyFolder, context),
           ListScanFolder(listScanFolder: _listScanFolder),
-          _buildSectionHeader('Scan history', () {}, context),
+          _buildSectionHeader(
+              'Scan history', _onNavigateToScanHistory, context),
           ListScanHistory(
             listScanHistory: _listScanHistory,
           )
@@ -75,11 +84,16 @@ class HomeScreen extends StatelessWidget {
                 Ripple(
                   onTap: onPress,
                   child: Text("See more",
-                      style: Theme.of(context).textTheme.labelSmall),
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelSmall!
+                          .copyWith(color: AppColors.semiGrey)),
                 ),
               ]));
 
-  Widget _buildFabScan(BuildContext context) => FloatingActionButton(
+  Widget _buildFabScan(BuildContext context) => Padding(
+      padding: const EdgeInsets.only(bottom: 60.0),
+      child: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         child: SvgPicture.asset(
           AppImages.iconScan,
@@ -87,5 +101,5 @@ class HomeScreen extends StatelessWidget {
           height: AppValues.iconDefaultSize,
         ),
         onPressed: () => _onFabScanPressed(),
-      );
+      ));
 }
