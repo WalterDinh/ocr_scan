@@ -13,7 +13,7 @@ class PdfApi {
     pdf.addPage(
       Page(
         build: (context) => Text(text,
-            style: const TextStyle(fontSize: 24), textAlign: TextAlign.left),
+            style: const TextStyle(fontSize: 14), textAlign: TextAlign.left),
       ),
     );
 
@@ -85,8 +85,7 @@ class PdfApi {
     final bytes = await fileInput.readAsBytes();
 
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final externalDir =
-        await getExternalStorageDirectory();
+    final externalDir = await getExternalStorageDirectory();
     // final externalDir =
     //     await getExternalStorageDirectories(type: StorageDirectory.documents);
     if (externalDir == null) {

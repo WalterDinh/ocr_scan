@@ -16,24 +16,27 @@ class _ScanResultTextState extends State<ScanResultText> {
             borderRadius: BorderRadius.circular(16.0), border: Border.all()),
         width: double.infinity,
         height: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-          child: CurrentScanDataTextSelector((data) {
-            if (data.isNotEmpty) {
-              String text = data.reduce((value, element) => '$value\n$element');
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+            child: CurrentScanDataTextSelector((data) {
+              if (data.isNotEmpty) {
+                String text =
+                    data.reduce((value, element) => '$value\n$element');
 
-              return Text(
-                text,
-                style: const TextStyle(height: 1.5),
-              );
-            }
+                return Text(
+                  text,
+                  style: const TextStyle(height: 1.5),
+                );
+              }
 
-            return Center(
-                child: Text(
-              'Can\'t detect text',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ));
-          }),
+              return Center(
+                  child: Text(
+                'Can\'t detect text',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ));
+            }),
+          ),
         ));
   }
 }
