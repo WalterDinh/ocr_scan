@@ -132,13 +132,14 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
                           blurRadius: 10,
                         )
                       ],
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: Theme.of(context).primaryColor,
                       borderRadius: const BorderRadius.all(
                           Radius.circular(AppValues.circularFlatButton / 2))),
                   width: AppValues.circularFlatButton,
                   height: AppValues.circularFlatButton,
                   child: const Icon(
                     Icons.photo,
+                    color: Colors.white,
                     size: AppValues.iconSize_22,
                   )),
             ),
@@ -147,7 +148,7 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
               onTap: () => onTakePhoto(),
               child: Container(
                   decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: Theme.of(context).primaryColor,
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.darkGrey.withOpacity(0.2),
@@ -161,6 +162,7 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
                   height: AppValues.circularFlatButton,
                   child: const Icon(
                     Icons.photo_camera,
+                    color: Colors.white,
                     size: AppValues.iconSize_22,
                   )),
             )
@@ -198,17 +200,17 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
           })),
       bottomNavigationBar: CurrentSelectedImageSelector(((data) {
         return Container(
-            decoration: BoxDecoration(color: AppColors.lighterGrey, boxShadow: [
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
               BoxShadow(
                 color: AppColors.darkGrey.withOpacity(0.2),
-                offset: const Offset(0, 3),
+                offset: const Offset(3, 0),
                 blurRadius: 10,
               )
             ]),
             padding: const EdgeInsets.all(24),
             child: ElevatedButton(
                 onPressed: data != null ? () => _onNavigateToScan(data) : null,
-                child: const Text('Continnue')));
+                child: const Text('Continue')));
       })),
     );
   }
