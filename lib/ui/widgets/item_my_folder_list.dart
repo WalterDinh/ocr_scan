@@ -20,14 +20,14 @@ List<DropdownItem> listMenu = [
         width: AppValues.iconSize_20,
         height: AppValues.iconSize_20,
       )),
-  DropdownItem(
-      name: 'Move to',
-      tag: 'move',
-      icon: SvgPicture.asset(
-        AppImages.iconMove,
-        width: AppValues.iconSize_20,
-        height: AppValues.iconSize_20,
-      )),
+  // DropdownItem(
+  //     name: 'Move to',
+  //     tag: 'move',
+  //     icon: SvgPicture.asset(
+  //       AppImages.iconMove,
+  //       width: AppValues.iconSize_20,
+  //       height: AppValues.iconSize_20,
+  //     )),
   DropdownItem(
       name: 'Delete',
       tag: 'delete',
@@ -51,13 +51,12 @@ class ItemMyFolderList extends StatelessWidget {
     required this.fileNumber,
   });
 
-  Function(MyFolderOptionType) _handleSelectOption(DropdownItem item) {
+  _handleSelectOption(DropdownItem item) {
     switch (item.tag) {
       case 'move':
         return onPressOption(MyFolderOptionType.move);
       case 'delete':
         return onPressOption(MyFolderOptionType.delete);
-
       default:
         return onPressOption(MyFolderOptionType.rename);
     }

@@ -47,7 +47,7 @@ class ItemScanHistory extends StatelessWidget {
       this.onPressItem,
       required this.onPressOption});
 
-  Function(HistoryOptionType) _handleSelectOption(DropdownItem item) {
+  _handleSelectOption(DropdownItem item) {
     if (item.tag == 'move') {
       return onPressOption(HistoryOptionType.move);
     }

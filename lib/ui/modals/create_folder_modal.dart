@@ -7,9 +7,13 @@ import 'package:my_app/ui/widgets/spacer.dart';
 class ModalCreateFolder extends StatefulWidget {
   final String initialValue;
   final Function(String text) onSummit;
+  final bool isUpdate;
 
   const ModalCreateFolder(
-      {Key? key, required this.initialValue, required this.onSummit})
+      {Key? key,
+      required this.initialValue,
+      required this.onSummit,
+      this.isUpdate = false})
       : super(key: key);
 
   @override
@@ -37,7 +41,7 @@ class ModalCreateFolderState extends State<ModalCreateFolder> {
       insetPadding: const EdgeInsets.all(24.0),
       titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
       title: Text(
-        'Create new folder',
+        widget.isUpdate ? 'Update folder' : 'Create new folder',
         style: Theme.of(context).textTheme.labelLarge,
       ),
       contentPadding: const EdgeInsets.fromLTRB(24, 16, 24, 24),
@@ -104,7 +108,7 @@ class ModalCreateFolderState extends State<ModalCreateFolder> {
             Navigator.of(context).pop();
           },
           child: Text(
-            'Create',
+            widget.isUpdate ? 'Update' : 'Create',
             style: Theme.of(context)
                 .textTheme
                 .labelMedium!
