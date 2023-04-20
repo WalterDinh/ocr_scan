@@ -295,12 +295,4 @@ class _ScanResultScreenState extends State<ScanResultScreen>
       },
     );
   }
-
-  void _onShowEditScreen(Pair data) {
-    AppNavigator.push(
-        Routes.edit_scan_result,
-        EditScanResultArgument(data.first, (text) {
-          scanPhotoBloc.add(ScanTextChanged(text));
-        }));
-  }
 }
