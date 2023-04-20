@@ -303,4 +303,23 @@ class _ScanResultScreenState extends State<ScanResultScreen>
           scanPhotoBloc.add(ScanTextChanged(text));
         }));
   }
+
+  void _onShowAlertDialog(String text) {
+    final alert = AlertDialog(
+      content: Text(text),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("OK"))
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (context) {
+        return alert;
+      },
+    );
+  }
 }
