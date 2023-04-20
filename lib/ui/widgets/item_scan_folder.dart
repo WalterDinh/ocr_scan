@@ -5,6 +5,7 @@ import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
 
 const ICON_SIZE = 26.0;
+const TEXT_WIDTH = 80.0;
 
 class ItemScanFolder extends StatelessWidget {
   final String folderName;
@@ -20,30 +21,38 @@ class ItemScanFolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Ripple(
       onTap: onPressFolder,
-      child: Column(
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.outline, width: 1)),
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              padding: const EdgeInsets.all(16),
-              child: SvgPicture.asset(
-                isAddButton ? AppImages.iconFolderAdd : AppImages.iconFolder,
-                width: ICON_SIZE,
-                height: ICON_SIZE,
-              )),
-          const VSpacer(8),
-          Text(
-            folderName,
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall
-                ?.copyWith(fontWeight: FontWeight.w600),
-          )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 1)),
+                padding: const EdgeInsets.all(16),
+                child: SvgPicture.asset(
+                  isAddButton ? AppImages.iconFolderAdd : AppImages.iconFolder,
+                  width: ICON_SIZE,
+                  height: ICON_SIZE,
+                )),
+            const VSpacer(8),
+            SizedBox(
+                width: TEXT_WIDTH,
+                child: Text(
+                  folderName,
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(fontWeight: FontWeight.w600),
+                ))
+          ],
+        ),
       ),
     );
   }
