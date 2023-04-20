@@ -19,10 +19,10 @@ class _ScanResultTextState extends State<ScanResultText> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-            child: CurrentScanDataTextSelector((data) {
-              if (data.isNotEmpty) {
+            child: CurrentScanDataTextSelector((text) {
+              if (text.isNotEmpty) {
                 return Text(
-                  data,
+                  text,
                   style: const TextStyle(height: 1.5),
                 );
               }
@@ -30,7 +30,7 @@ class _ScanResultTextState extends State<ScanResultText> {
               return Center(
                   child: Text(
                 'Can\'t detect text',
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.bodyLarge,
               ));
             }),
           ),
