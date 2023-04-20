@@ -26,8 +26,8 @@ class ScanPhotoStateStatusSelector
         );
 }
 
-class CurrentScanDataTextSelector extends ScanPhotoStateSelector<List<String>> {
-  CurrentScanDataTextSelector(Widget Function(List<String>) builder)
+class CurrentScanDataTextSelector extends ScanPhotoStateSelector<String> {
+  CurrentScanDataTextSelector(Widget Function(String) builder)
       : super(
           selector: (state) => state.dataText,
           builder: builder,

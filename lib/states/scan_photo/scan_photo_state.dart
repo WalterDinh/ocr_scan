@@ -4,14 +4,14 @@ enum ScanPhotoStateStatus { initial, loading, loadSuccess, loadFailure }
 
 class ScanPhotoState {
   final ScanPhotoStateStatus status;
-  final List<String> dataText;
+  final String dataText;
   final AssetEntity? selectedPhoto;
   final Exception? error;
   final File? pdfFile;
   const ScanPhotoState._({
     this.pdfFile,
     this.status = ScanPhotoStateStatus.initial,
-    this.dataText = const [],
+    this.dataText = '',
     this.selectedPhoto,
     this.error,
   });
@@ -23,7 +23,7 @@ class ScanPhotoState {
     );
   }
 
-  ScanPhotoState asLoadSuccess(List<String> dataText, File file) {
+  ScanPhotoState asLoadSuccess(String dataText, File file) {
     return copyWith(
       status: ScanPhotoStateStatus.loadSuccess,
       pdfFile: file,
@@ -41,7 +41,7 @@ class ScanPhotoState {
   ScanPhotoState copyWith({
     File? pdfFile,
     ScanPhotoStateStatus? status,
-    List<String>? dataText,
+    String? dataText,
     final AssetEntity? selectedPhoto,
     Exception? error,
   }) {

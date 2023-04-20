@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:my_app/core/pdf.dart';
+import 'package:my_app/routes.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
+import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/scan_result/widgets/select_mimetype_modal.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -202,6 +204,9 @@ class _ScanResultScreenState extends State<ScanResultScreen>
       case 1:
         _onShowShareFileModal(data);
         break;
+      case 3:
+        _onShowEditScreen(data);
+        break;
     }
   }
 
@@ -263,6 +268,15 @@ class _ScanResultScreenState extends State<ScanResultScreen>
               },
             ));
   }
+
+  void _onShowEditScreen(Pair data) {
+    AppNavigator.push(
+        Routes.edit_scan_result,
+        EditScanResultArgument(data.first, (text) {
+          scanPhotoBloc.add(ScanTextChanged(text));
+        }));
+  }
+
 
   void _onShowAlertDialog(String text) {
     final alert = AlertDialog(
