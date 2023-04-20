@@ -295,39 +295,4 @@ class _ScanResultScreenState extends State<ScanResultScreen>
       },
     );
   }
-
-  void _onShowEditScreen(Pair data) {
-    AppNavigator.push(
-        Routes.edit_scan_result,
-        EditScanResultArgument(data.first, (text) {
-          scanPhotoBloc.add(ScanTextChanged(text));
-        }));
-  }
-
-  void _onShowAlertDialog(String text) {
-    final alert = AlertDialog(
-      content: Text(text),
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text("OK"))
-      ],
-    );
-    showDialog(
-      context: context,
-      builder: (context) {
-        return alert;
-      },
-    );
-  }
-
-  void _onShowEditScreen(Pair data) {
-    AppNavigator.push(
-        Routes.edit_scan_result,
-        EditScanResultArgument(data.first, (text) {
-          scanPhotoBloc.add(ScanTextChanged(text));
-        }));
-  }
 }
