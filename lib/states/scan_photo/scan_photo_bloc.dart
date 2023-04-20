@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -16,6 +17,7 @@ class ScanPhotoBloc extends Bloc<ScanPhotoEvent, ScanPhotoState> {
   ScanPhotoBloc(this._scanRepository) : super(const ScanPhotoState.initial()) {
     on<ScanPhotoLoadStarted>(_onLoadStarted,
         transformer: (events, mapper) => events.switchMap(mapper));
+    on<ScanTextChanged>(_onTextChanged);
   }
 
   void _onLoadStarted(
@@ -29,7 +31,7 @@ class ScanPhotoBloc extends Bloc<ScanPhotoEvent, ScanPhotoState> {
         if (dataText.isNotEmpty) {
           String text = dataText.reduce((value, element) => '$value\n$element');
           final pdf = await PdfApi.generateCenteredText(text);
-          emit(state.asLoadSuccess(dataText, pdf));
+          emit(state.asLoadSuccess(text, pdf));
         } else {
           emit(state.asLoadFailure(Exception()));
         }
@@ -39,5 +41,12 @@ class ScanPhotoBloc extends Bloc<ScanPhotoEvent, ScanPhotoState> {
     } on Exception catch (e) {
       emit(state.asLoadFailure(e));
     }
+  }
+
+  Future<void> _onTextChanged(
+      ScanTextChanged event, Emitter<ScanPhotoState> emit) async {
+    final dataText = event.text;
+    final pdf = await PdfApi.generateCenteredText(dataText);
+    emit(state.copyWith(dataText: event.text, pdfFile: pdf));
   }
 }

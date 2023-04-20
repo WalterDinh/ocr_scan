@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/core/fade_page_route.dart';
+import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/intro/intro.dart';
 import 'package:my_app/ui/screens/move_file/move_file.dart';
 import 'package:my_app/ui/screens/my_folder/my_folder.dart';
 import 'package:my_app/ui/screens/scan_history/scan_history.dart';
 import 'package:my_app/ui/screens/scan_result/scan_result.dart';
+import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result.dart';
 import 'package:my_app/ui/screens/search/search.dart';
 import 'package:my_app/ui/screens/select_photo/select_photo.dart';
 import 'package:my_app/ui/screens/home/home.dart';
@@ -20,7 +22,8 @@ enum Routes {
   move_file,
   my_folder,
   scan_history,
-  setting
+  setting,
+  edit_scan_result
 }
 
 class _Paths {
@@ -34,6 +37,7 @@ class _Paths {
   static const String my_folder = '/my_folder';
   static const String scan_history = '/scan_history';
   static const String setting = '/setting';
+  static const String edit_scan_result = '/edit_scan_result';
 
   static const Map<Routes, String> _pathMap = {
     Routes.splash: _Paths.splash,
@@ -46,6 +50,7 @@ class _Paths {
     Routes.my_folder: _Paths.my_folder,
     Routes.scan_history: _Paths.scan_history,
     Routes.setting: _Paths.setting,
+    Routes.edit_scan_result: _Paths.edit_scan_result,
   };
 
   static String of(Routes route) => _pathMap[route] ?? splash;
@@ -74,6 +79,11 @@ class AppNavigator {
         return FadeRoute(page: const ScanHistoryScreen());
       case _Paths.setting:
         return FadeRoute(page: const SettingScreen());
+      case _Paths.edit_scan_result:
+        final args = settings.arguments as EditScanResultArgument;
+        return FadeRoute(
+            page: EditScanResultScreen(
+                dataText: args.dataText, onTextChange: args.onTextChange));
       default:
         return FadeRoute(page: const IntroScreen());
     }

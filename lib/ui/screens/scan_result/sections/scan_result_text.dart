@@ -18,14 +18,9 @@ class _ScanResultTextState extends State<ScanResultText> {
         height: double.infinity,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-          child: CurrentScanDataTextSelector((data) {
-            if (data.isNotEmpty) {
-              String text = data.reduce((value, element) => '$value\n$element');
-
-              return Text(
-                text,
-                style: const TextStyle(height: 1.5),
-              );
+          child: CurrentScanDataTextSelector((text) {
+            if (text.isNotEmpty) {
+              return Text(text, style: const TextStyle(height: 1.5));
             }
 
             return Center(

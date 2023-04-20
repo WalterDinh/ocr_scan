@@ -7,5 +7,12 @@ abstract class ScanPhotoEvent {
 
 class ScanPhotoLoadStarted extends ScanPhotoEvent {
   final File? filePhoto;
+
   const ScanPhotoLoadStarted(this.filePhoto);
+}
+
+class ScanTextChanged extends ScanPhotoEvent {
+  final String text;
+
+  const ScanTextChanged(this.text);
 }
