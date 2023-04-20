@@ -191,7 +191,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
 
   void _onTapBottomNavItem(int index, Pair data) async {
     switch (index) {
-      case 1:
+      case 0:
         var status = await Permission.storage.status;
         if (status.isGranted) {
           _onShowDownloadFileModal(data);
@@ -199,7 +199,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
           Permission.storage.request();
         }
         break;
-      case 2:
+      case 1:
         _onShowShareFileModal(data);
         break;
     }
@@ -210,15 +210,20 @@ class _ScanResultScreenState extends State<ScanResultScreen>
         context: context,
         builder: (context) => SelectMimeTypeModal(
               title: 'Download file',
-              onTakeMimeType: (mimetype) {
+              onTakeMimeType: (mimetype) async {
                 switch (mimetype) {
                   case MimeType.pdf:
                     // PdfApi.copyFileDocumentToExternalStorage(file: data.second);
                     List<String> dataText = data.first as List<String>;
                     String dataConverted =
                         dataText.reduce((value, element) => '$value\n$element');
-                    PdfApi.saveDocumentToExternal(
+                    final result = await PdfApi.saveDocumentToExternal(
                         text: dataConverted, fileInput: data.second);
+                    if (result == null) {
+                      _onShowAlertDialog("Error");
+                    } else {
+                      _onShowAlertDialog("Success");
+                    }
                     break;
                   case MimeType.txt:
                     // TODO: Handle this case.
@@ -242,14 +247,11 @@ class _ScanResultScreenState extends State<ScanResultScreen>
               onTakeMimeType: (mimetype) async {
                 switch (mimetype) {
                   case MimeType.pdf:
-                    File file = data.second as File;
-                    Share.shareXFiles([XFile(file.path)]);
+                    PdfApi.shareDocument();
                     break;
                   case MimeType.txt:
-                    List<String> dataText = data.first as List<String>;
-                    String dataConverted =
-                        dataText.reduce((value, element) => '$value\n$element');
-                    Share.share(dataConverted);
+                    List<String> dataText = data.first;
+                    PdfApi.shareTxtFile(dataText);
                     break;
                   case MimeType.image:
                     // TODO: Handle this case.
@@ -260,5 +262,20 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                 }
               },
             ));
+  }
+
+  void _onShowAlertDialog(String text) {
+    final alert = AlertDialog(
+      content: Text(text),
+      actions: [TextButton(onPressed: () {
+        Navigator.pop(context);
+      }, child: const Text("OK"))],
+    );
+    showDialog(
+      context: context,
+      builder: (context) {
+        return alert;
+      },
+    );
   }
 }
