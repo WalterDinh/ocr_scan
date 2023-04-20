@@ -100,15 +100,20 @@ class HomeScreen extends StatelessWidget {
                 ),
               ]));
 
-  Widget _buildFabScan(BuildContext context) => Padding(
-      padding: const EdgeInsets.only(bottom: 60.0),
-      child: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        child: SvgPicture.asset(
-          AppImages.iconScan,
-          width: AppValues.iconDefaultSize,
-          height: AppValues.iconDefaultSize,
-        ),
-        onPressed: () => _onFabScanPressed(),
-      ));
+  Widget _buildFabScan(BuildContext context) {
+    double paddingBottomFloadButton =
+        16 + MediaQuery.of(context).viewPadding.bottom;
+
+    return Padding(
+        padding: EdgeInsets.only(bottom: paddingBottomFloadButton),
+        child: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
+          child: SvgPicture.asset(
+            AppImages.iconScan,
+            width: AppValues.iconDefaultSize,
+            height: AppValues.iconDefaultSize,
+          ),
+          onPressed: () => _onFabScanPressed(),
+        ));
+  }
 }

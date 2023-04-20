@@ -13,7 +13,7 @@ class PdfApi {
     pdf.addPage(
       Page(
         build: (context) => Text(text,
-            style: const TextStyle(fontSize: 24), textAlign: TextAlign.left),
+            style: const TextStyle(fontSize: 14), textAlign: TextAlign.left),
       ),
     );
 

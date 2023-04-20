@@ -8,6 +8,8 @@ import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/ui/widgets/item_folder_list.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
+
+import '../../modals/create_folder_modal.dart';
 part 'sections/empty_folder.dart';
 part 'sections/list_folder.dart';
 
@@ -28,7 +30,17 @@ class _MoveFileScreenState extends State<MoveFileScreen> {
     super.initState();
   }
 
-  void _onOpenModalCreateFolder() {}
+  void _onOpenModalCreateFolder() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ModalCreateFolder(
+          onSummit: (text) => {},
+          initialValue: 'New folder_04_07_2023',
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,17 +60,22 @@ class _MoveFileScreenState extends State<MoveFileScreen> {
     );
   }
 
-  Widget _buildFabScan(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 60.0),
-        child: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: SvgPicture.asset(
-            AppImages.iconFolderAdd,
-            width: AppValues.iconDefaultSize,
-            height: AppValues.iconDefaultSize,
-            color: AppColors.lighterGrey,
-          ),
-          onPressed: () => _onOpenModalCreateFolder(),
+  Widget _buildFabScan(BuildContext context) {
+    double paddingBottomFloadButton =
+        16 + MediaQuery.of(context).viewPadding.bottom;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: paddingBottomFloadButton),
+      child: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        child: SvgPicture.asset(
+          AppImages.iconFolderAdd,
+          width: AppValues.iconDefaultSize,
+          height: AppValues.iconDefaultSize,
+          color: AppColors.lighterGrey,
         ),
-      );
+        onPressed: () => _onOpenModalCreateFolder(),
+      ),
+    );
+  }
 }

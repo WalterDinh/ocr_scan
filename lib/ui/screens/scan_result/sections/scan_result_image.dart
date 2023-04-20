@@ -34,11 +34,11 @@ class _ScanResultImageScreenState extends State<ScanResultImage> {
 
           return PDFView(
             filePath: file.path,
-            // autoSpacing: false,
-            // swipeHorizontal: true,
-            // pageSnap: false,
-            // pageFling: false,
-            nightMode: true,
+            autoSpacing: true,
+            enableSwipe: true,
+            swipeHorizontal: true,
+            fitEachPage: true,
+            nightMode: false,
             onViewCreated: (controller) =>
                 setState(() => this.controller = controller),
           );
