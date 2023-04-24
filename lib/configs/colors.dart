@@ -29,6 +29,7 @@ class AppColors {
   static const Color yellow = Color(0xFFF6C747);
   static const Color semiGrey = Color(0xFF9FA5A2);
   static const Color violet = Color(0xD07038F8);
+  static const Color green = Color(0xFFA9C5B4);
 
   static const Color darkGreen = Color(0xFF286D44);
 }

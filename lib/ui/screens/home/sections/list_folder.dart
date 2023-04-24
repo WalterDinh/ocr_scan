@@ -1,6 +1,6 @@
 part of '../home.dart';
 
-double listHeight = 86.0;
+double listHeight = 100.0;
 
 class ListScanFolder extends StatelessWidget {
   const ListScanFolder({
@@ -11,6 +11,11 @@ class ListScanFolder extends StatelessWidget {
 
   final List<Folder> listScanFolder;
   final Function() onCreateFolder;
+
+  _onNavigateToDetail(Folder folder) {
+    AppNavigator.push(Routes.folder_detail, folder);
+  }
+
   @override
   Widget build(BuildContext context) => Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 0),
@@ -26,7 +31,9 @@ class ListScanFolder extends StatelessWidget {
               isAddButton: isAddButton,
               folderName:
                   isAddButton ? 'Create new' : listScanFolder[index].title,
-              onPressFolder: isAddButton ? onCreateFolder : () {},
+              onPressFolder: isAddButton
+                  ? onCreateFolder
+                  : () => _onNavigateToDetail(listScanFolder[index]),
             );
           },
         ),

@@ -7,31 +7,32 @@ import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/data/source/local/model/file_scan.dart';
+import 'package:my_app/data/source/local/model/folder.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/states/file_manager/file_manager_bloc.dart';
-import 'package:my_app/states/file_manager/file_manager_selector.dart';
+import 'package:my_app/states/folder_detail_manager/folder_detail_bloc.dart';
+import 'package:my_app/states/folder_detail_manager/folder_detail_selector.dart';
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/widgets/item_scan_history.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
-import 'package:my_app/ui/widgets/spacer.dart';
-part 'sections/empty_file.dart';
 part 'sections/list_file_scan.dart';
 
-class ScanHistoryScreen extends StatefulWidget {
-  const ScanHistoryScreen({super.key});
-
+class FolderDetail extends StatefulWidget {
+  const FolderDetail({super.key, required this.folder});
+  final Folder folder;
   @override
-  State<StatefulWidget> createState() => _ScanHistoryScreenState();
+  State<StatefulWidget> createState() => _FolderDetailState();
 }
 
-class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
+class _FolderDetailState extends State<FolderDetail> {
   static const double leadingWidth = 44;
+  FolderDetailBloc get folderDetailManager => context.read<FolderDetailBloc>();
   FileScanManagerBloc get filScanManager => context.read<FileScanManagerBloc>();
 
   @override
   void initState() {
     scheduleMicrotask(() async {
-      filScanManager.add(const GetAllFileScanStarted());
+      folderDetailManager.add(GetAllFileScanByFolderStarted(widget.folder.id));
     });
 
     super.initState();
@@ -42,7 +43,17 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
   }
 
   _onDeleteFile(FileScan file) {
-    filScanManager.add(DeleteFileScanStarted(file));
+    folderDetailManager.add(DeleteFileFolderDetailStarted(file));
+  }
+
+  _onEdit(FileScan fileScan) {
+    AppNavigator.push(
+        Routes.edit_scan_result,
+        EditScanResultArgument(fileScan.dataText, (text) {
+          FileScan newFile = fileScan;
+          newFile.dataText = text;
+          filScanManager.add(UpdateFileScanStarted(fileScan, null));
+        }));
   }
 
   // void _onRenameFile(FileScan file) {
@@ -75,19 +86,6 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
     if (type == HistoryOptionType.move) {
       AppNavigator.push(Routes.move_file, file);
     }
-    // if (type == HistoryOptionType.rename) {
-    //   _onDeleteFile(file);
-    // }
-  }
-
-  _onEdit(FileScan fileScan) {
-    AppNavigator.push(
-        Routes.edit_scan_result,
-        EditScanResultArgument(fileScan.dataText, (text) {
-          FileScan newFile = fileScan;
-          newFile.dataText = text;
-          filScanManager.add(UpdateFileScanStarted(fileScan, null));
-        }));
   }
 
   @override
@@ -97,15 +95,15 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
             isBackButtonEnabled: true,
             leadingWidth: leadingWidth,
             appBarTitleText: Text(
-              'Scan history',
+              widget.folder.title,
               style: Theme.of(context)
                   .textTheme
                   .bodyLarge!
                   .copyWith(color: AppColors.black),
             )),
         floatingActionButton: _buildFabScan(context),
-        body: FileScanManagerStatusSelector((status) {
-          if (status == FileScanManagerStateStatus.loading) {
+        body: FolderDetailManagerStatusSelector((status) {
+          if (status == FolderDetailManagerStateStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -124,9 +122,9 @@ class _ScanHistoryScreenState extends State<ScanHistoryScreen> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                EmptyHistory(
-                  context: context,
-                )
+                // EmptyHistory(
+                //   context: context,
+                // )
               ],
             );
           });

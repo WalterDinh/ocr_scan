@@ -1,7 +1,7 @@
 part of '../scan_history.dart';
 
-class EmptyFolder extends StatelessWidget {
-  const EmptyFolder({
+class EmptyHistory extends StatelessWidget {
+  const EmptyHistory({
     super.key,
     required this.context,
   });
@@ -21,21 +21,21 @@ class EmptyFolder extends StatelessWidget {
           ),
           const VSpacer(16),
           Text(
-            'You don’t have any folder',
+            'You don’t have any file',
             style: Theme.of(context)
                 .textTheme
                 .bodyLarge!
                 .copyWith(color: AppColors.grey, fontWeight: FontWeight.w400),
             textAlign: TextAlign.center,
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: const Text('Create new folder'),
-            ),
-          )
+          // Container(
+          //   margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //     onPressed: () {},
+          //     child: const Text('Create new folder'),
+          //   ),
+          // )
         ],
       ),
     );

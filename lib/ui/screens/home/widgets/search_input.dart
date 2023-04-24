@@ -11,11 +11,15 @@ class SearchInput extends StatelessWidget {
     this.onPressInput,
     this.onPressIconSearch,
     required this.hintText,
+    this.onChangeText,
+    this.controller,
   });
 
   final Function()? onPressInput;
   final Function()? onPressIconSearch;
   final String hintText;
+  final Function(String)? onChangeText;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,8 @@ class SearchInput extends StatelessWidget {
       onTap: onPressInput,
       child: Material(
         child: TextField(
+          controller: controller,
+          onChanged: onChangeText,
           enabled: onPressInput == null,
           decoration: InputDecoration(
               filled: true,

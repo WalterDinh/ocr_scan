@@ -12,19 +12,9 @@ class ListScanFolder extends StatefulWidget {
 }
 
 class _ListScanFolderState extends State<ListScanFolder> {
-  // late ScrollController controller;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller = ScrollController()..addListener(_scrollListener);
-  // }
-
-  // @override
-  // void dispose() {
-  //   controller.removeListener(_scrollListener);
-  //   super.dispose();
-  // }
+  _onNavigateToDetail(Folder folder) {
+    AppNavigator.push(Routes.folder_detail, folder);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +22,9 @@ class _ListScanFolderState extends State<ListScanFolder> {
       child: ListFolderSelector((data) => ListView.builder(
             itemBuilder: (context, index) {
               return ItemMyFolderList(
-                fileNumber: '5',
+                fileNumber: '${data[index].totalFile}',
                 folderName: data[index].title,
-                onPressFolder: () {},
+                onPressFolder: () => _onNavigateToDetail(data[index]),
                 onPressOption: (type) =>
                     widget.onHandleOptions(type, data[index]),
               );
@@ -43,13 +33,4 @@ class _ListScanFolderState extends State<ListScanFolder> {
           )),
     );
   }
-
-  // void _scrollListener() {
-  //   return;
-  // if (controller.position.extentAfter < 500) {
-  //   setState(() {
-  //     items.addAll(List.generate(42, (index) => 'Inserted folder $index'));
-  //   });
-  // }
-  // }
 }

@@ -8,6 +8,7 @@ import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/data/source/local/model/folder.dart';
+import 'package:my_app/routes.dart';
 import 'package:my_app/states/folder_manager/folder_manager_bloc.dart';
 import 'package:my_app/states/folder_manager/folder_manager_selector.dart';
 import 'package:my_app/ui/modals/create_folder_modal.dart';
@@ -42,7 +43,7 @@ class _MyFolderScreenState extends State<MyFolderScreen> {
       context: context,
       builder: (BuildContext context) {
         DateTime now = DateTime.now();
-        String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+        String formattedDate = DateFormat('MM/dd/yyyy').format(now);
 
         return ModalCreateFolder(
           onSummit: (text) =>
@@ -64,8 +65,8 @@ class _MyFolderScreenState extends State<MyFolderScreen> {
         return ModalCreateFolder(
           isUpdate: true,
           onSummit: (text) => {
-            folderManager
-                .add(UpdateFolderStarted(Folder(id: folder.id, title: text)))
+            folderManager.add(UpdateFolderStarted(Folder(
+                id: folder.id, title: text, totalFile: folder.totalFile)))
           },
           initialValue: folder.title,
         );

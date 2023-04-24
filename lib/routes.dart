@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/fade_page_route.dart';
+import 'package:my_app/data/repositories/local_repository.dart';
+import 'package:my_app/data/source/local/model/file_scan.dart';
+import 'package:my_app/data/source/local/model/folder.dart';
+import 'package:my_app/states/folder_detail_manager/folder_detail_bloc.dart';
+import 'package:my_app/states/search/search_bloc.dart';
+import 'package:my_app/ui/screens/detail_folder/detail_folder.dart';
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/intro/intro.dart';
 import 'package:my_app/ui/screens/move_file/move_file.dart';
@@ -23,7 +30,8 @@ enum Routes {
   my_folder,
   scan_history,
   setting,
-  edit_scan_result
+  edit_scan_result,
+  folder_detail
 }
 
 class _Paths {
@@ -38,6 +46,7 @@ class _Paths {
   static const String scan_history = '/scan_history';
   static const String setting = '/setting';
   static const String edit_scan_result = '/edit_scan_result';
+  static const String folder_detail = '/folder_detail';
 
   static const Map<Routes, String> _pathMap = {
     Routes.splash: _Paths.splash,
@@ -51,6 +60,7 @@ class _Paths {
     Routes.scan_history: _Paths.scan_history,
     Routes.setting: _Paths.setting,
     Routes.edit_scan_result: _Paths.edit_scan_result,
+    Routes.folder_detail: _Paths.folder_detail,
   };
 
   static String of(Routes route) => _pathMap[route] ?? splash;
@@ -68,17 +78,37 @@ class AppNavigator {
       case _Paths.scan_result:
         return FadeRoute(page: const ScanResultScreen());
       case _Paths.move_file:
-        return FadeRoute(page: const MoveFileScreen());
+        return FadeRoute(
+            page: MoveFileScreen(
+          fileScan: settings.arguments as FileScan,
+        ));
       case _Paths.search:
-        return FadeRoute(page: const SearchScreen());
+        return FadeRoute(
+            page: BlocProvider<SearchBloc>(
+                create: (context) => SearchBloc(
+                      context.read<LocalDataRepository>(),
+                    ),
+                child: const SearchScreen()));
       case _Paths.home:
-        return FadeRoute(page: HomeScreen());
+        return FadeRoute(page: const HomeScreen());
       case _Paths.my_folder:
         return FadeRoute(page: const MyFolderScreen());
       case _Paths.scan_history:
         return FadeRoute(page: const ScanHistoryScreen());
       case _Paths.setting:
         return FadeRoute(page: const SettingScreen());
+      case _Paths.folder_detail:
+        final args = settings.arguments as Folder;
+
+        return FadeRoute(
+            page: BlocProvider<FolderDetailBloc>(
+                create: (context) => FolderDetailBloc(
+                      context.read<LocalDataRepository>(),
+                    ),
+                child: FolderDetail(
+                  folder: args,
+                )));
+
       case _Paths.edit_scan_result:
         final args = settings.arguments as EditScanResultArgument;
         return FadeRoute(

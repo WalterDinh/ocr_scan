@@ -4,7 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:my_app/configs/colors.dart';
 import 'package:my_app/core/pdf.dart';
+import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
@@ -12,8 +15,8 @@ import 'package:my_app/states/select_image_from_gallery/select_image_from_galler
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/scan_result/widgets/select_mimetype_modal.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
+import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../core/base/pair.dart';
 
@@ -56,66 +59,65 @@ class _ScanResultScreenState extends State<ScanResultScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: DefaultTabController(
-            length: 2,
-            child: Scaffold(
-                appBar: MainAppBar(
-                    backgroundColor: Colors.transparent,
-                    iconTheme:
-                        IconThemeData(color: Theme.of(context).iconTheme.color),
-                    actions: const [
-                      Padding(
-                        padding: EdgeInsets.only(right: 16.0),
-                        child: Center(child: Text("Done")),
-                      )
-                    ]),
-                body: ScanPhotoStateStatusSelector((status) {
-                  switch (status) {
-                    case ScanPhotoStateStatus.loading:
-                      return Scaffold(
-                        body: _buildLoading(),
-                      );
+    return ScanPhotoStateStatusSelector((status) {
+      if (status == ScanPhotoStateStatus.loading) {
+        return _buildLoading();
+      }
 
-                    case ScanPhotoStateStatus.loadFailure:
-                      return Scaffold(
-                        body: _buildError(),
-                      );
-
-                    default:
-                      return _buildBody();
-                  }
-                })),
-          ),
-        ),
-        CurrentScanDataSelector(
-          (data) {
-            return BottomNavigationBar(
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              selectedItemColor: Colors.grey,
-              type: BottomNavigationBarType.fixed,
-              unselectedItemColor: Colors.grey,
-              unselectedLabelStyle: const TextStyle(color: Colors.grey),
-              selectedLabelStyle: const TextStyle(color: Colors.grey),
-              onTap: (value) => _onTapBottomNavItem(value, data),
-              items: const [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.download), label: "Download"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.ios_share), label: "Share"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.change_circle_outlined), label: "Convert"),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.more_horiz_outlined), label: "More"),
-              ],
-            );
-          },
-        )
-      ],
-    );
+      return Column(
+        children: [
+          Expanded(
+              child: DefaultTabController(
+                  length: 2,
+                  child: Scaffold(
+                    appBar: MainAppBar(
+                        backgroundColor: Colors.transparent,
+                        iconTheme: IconThemeData(
+                            color: Theme.of(context).iconTheme.color),
+                        actions: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Center(
+                                child: Ripple(
+                              onTap: () => AppNavigator.pop(),
+                              child: const Text("Done"),
+                            )),
+                          )
+                        ]),
+                    body: status == ScanPhotoStateStatus.loadFailure
+                        ? Scaffold(body: _buildError())
+                        : _buildBody(),
+                  ))),
+          status != ScanPhotoStateStatus.loadFailure
+              ? CurrentScanDataSelector(
+                  (data) {
+                    return BottomNavigationBar(
+                      showSelectedLabels: true,
+                      showUnselectedLabels: true,
+                      selectedItemColor: Colors.grey,
+                      type: BottomNavigationBarType.fixed,
+                      unselectedItemColor: Colors.grey,
+                      unselectedLabelStyle: const TextStyle(color: Colors.grey),
+                      selectedLabelStyle: const TextStyle(color: Colors.grey),
+                      onTap: (value) => _onTapBottomNavItem(value, data),
+                      items: const [
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.download), label: "Download"),
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.ios_share), label: "Share"),
+                        // BottomNavigationBarItem(
+                        //     icon: Icon(Icons.change_circle_outlined), label: "Convert"),
+                        BottomNavigationBarItem(
+                            icon: Icon(Icons.more_horiz_outlined),
+                            label: "More"),
+                      ],
+                    );
+                  },
+                )
+              : const SizedBox()
+        ],
+      );
+    });
   }
 
   Widget _buildBody() {
@@ -148,7 +150,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
           labelColor: Colors.white,
           unselectedLabelColor: Colors.black,
           tabs: const [
-            Tab(text: 'JPG'),
+            Tab(text: 'PDF'),
             Tab(text: 'TXT'),
           ],
         ),
@@ -169,7 +171,13 @@ class _ScanResultScreenState extends State<ScanResultScreen>
   }
 
   Widget _buildLoading() {
-    return const Center(child: Text('Loading....'));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+          child: SpinKitFadingCircle(
+              color: Theme.of(context).primaryColor,
+              size: AppValues.circularFlatButton)),
+    );
   }
 
   Widget _buildError() {
@@ -180,10 +188,21 @@ class _ScanResultScreenState extends State<ScanResultScreen>
           child: Container(
             padding: const EdgeInsets.only(bottom: 28),
             alignment: Alignment.center,
-            child: const Icon(
-              Icons.warning_amber_rounded,
-              size: 60,
-              color: Colors.black26,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  size: 60,
+                  color: AppColors.green,
+                ),
+                Text(
+                  'Something went wrong, try later',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      color: AppColors.grey, fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           ),
         ),
@@ -196,15 +215,35 @@ class _ScanResultScreenState extends State<ScanResultScreen>
       case 0:
         var status = await Permission.storage.status;
         if (status.isGranted) {
-          _onShowDownloadFileModal(data);
+          // print(data.first);
+
+          // List<dynamic> dataText = data.first;
+          // print(data.first);
+          // String dataConverted =
+          //     dataText.reduce((value, element) => '$value\n$element');
+          final result = await PdfApi.saveDocumentToExternal(
+              text: data.first, fileInput: data.second);
+          if (result == null) {
+            _onShowAlertDialog("Error");
+          } else {
+            print(result);
+            _onShowAlertDialog("Success");
+          }
         } else {
           Permission.storage.request();
         }
         break;
       case 1:
-        _onShowShareFileModal(data);
+        if (_tabController!.index == 0) {
+          PdfApi.shareDocument();
+        } else {
+          // List<String> dataText = data.first;
+          PdfApi.shareTxtFile(data.first);
+        }
+
+        // _onShowShareFileModal(data);
         break;
-      case 3:
+      case 2:
         _onShowEditScreen(data);
         break;
     }
@@ -219,11 +258,11 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                 switch (mimetype) {
                   case MimeType.pdf:
                     // PdfApi.copyFileDocumentToExternalStorage(file: data.second);
-                    List<String> dataText = data.first as List<String>;
-                    String dataConverted =
-                        dataText.reduce((value, element) => '$value\n$element');
+                    // List<String> dataText = data.first as List<String>;
+                    // String dataConverted =
+                    //     dataText.reduce((value, element) => '$value\n$element');
                     final result = await PdfApi.saveDocumentToExternal(
-                        text: dataConverted, fileInput: data.second);
+                        text: data.first, fileInput: data.second);
                     if (result == null) {
                       _onShowAlertDialog("Error");
                     } else {
@@ -256,7 +295,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                     break;
                   case MimeType.txt:
                     List<String> dataText = data.first;
-                    PdfApi.shareTxtFile(dataText);
+                    // PdfApi.shareTxtFile(dataText);
                     break;
                   case MimeType.image:
                     // TODO: Handle this case.
@@ -277,13 +316,16 @@ class _ScanResultScreenState extends State<ScanResultScreen>
         }));
   }
 
-
   void _onShowAlertDialog(String text) {
     final alert = AlertDialog(
       content: Text(text),
-      actions: [TextButton(onPressed: () {
-        Navigator.pop(context);
-      }, child: const Text("OK"))],
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("OK"))
+      ],
     );
     showDialog(
       context: context,

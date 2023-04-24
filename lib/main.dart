@@ -5,6 +5,7 @@ import 'package:my_app/core/network.dart';
 import 'package:my_app/data/repositories/scan_repository.dart';
 import 'package:my_app/data/source/local/local_data_source.dart';
 import 'package:my_app/data/source/scan_data_source.dart';
+import 'package:my_app/states/file_manager/file_manager_bloc.dart';
 import 'package:my_app/states/folder_manager/folder_manager_bloc.dart';
 import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
@@ -57,9 +58,14 @@ void main() async {
           ///
           BlocProvider<SelectImageFromGalleryBloc>(
               create: (context) => SelectImageFromGalleryBloc()),
+          BlocProvider<FileScanManagerBloc>(
+              create: (context) => FileScanManagerBloc(
+                    context.read<LocalDataRepository>(),
+                  )),
           BlocProvider<ScanPhotoBloc>(
-              create: (context) =>
-                  ScanPhotoBloc(context.read<ScanPhotoRepository>())),
+              create: (context) => ScanPhotoBloc(
+                  context.read<ScanPhotoRepository>(),
+                  context.read<FileScanManagerBloc>())),
           BlocProvider<FolderManagerBloc>(
               create: (context) =>
                   FolderManagerBloc(context.read<LocalDataRepository>())),
