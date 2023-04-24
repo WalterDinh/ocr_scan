@@ -10,30 +10,32 @@ class DefaultSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          SvgPicture.asset(
-            AppImages.iconSearchEmpty,
-            width: AppValues.iconSize_64,
-            height: AppValues.iconSize_64,
-          ),
-          const VSpacer(16),
-          Text(
-            'Search in contents',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-          const VSpacer(8),
-          Text(
-            'Search file names and content for\n your search terms.',
-            style: Theme.of(context)
-                .textTheme
-                .bodyLarge!
-                .copyWith(color: AppColors.grey, fontWeight: FontWeight.w400),
-            textAlign: TextAlign.center,
-          )
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SvgPicture.asset(
+          AppImages.iconSearchEmpty,
+          width: AppValues.iconSize_64,
+          height: AppValues.iconSize_64,
+        ),
+        const VSpacer(16),
+        Text(
+          'Search in contents',
+          style: Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+        const VSpacer(8),
+        Text(
+          'Search file names and content for\n your search terms.',
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge!
+              .copyWith(color: AppColors.grey, fontWeight: FontWeight.w400),
+          textAlign: TextAlign.center,
+        )
+      ],
     );
   }
 }

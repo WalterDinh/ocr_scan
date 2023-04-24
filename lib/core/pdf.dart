@@ -46,12 +46,22 @@ class PdfApi {
     await Share.shareXFiles([XFile(filePath)]);
   }
 
-  static shareTxtFile(List<String> dataText) async {
-    String dataConverted =
-        dataText.reduce((value, element) => '$value\n$element');
+  Future<String?> _findLocalPath() async {
+    if (Platform.isAndroid) {
+      return "/sdcard/download/";
+    } else {
+      var directory = await getApplicationDocumentsDirectory();
+
+      return '${directory.path}${Platform.pathSeparator}Download';
+    }
+  }
+
+  static shareTxtFile(String dataText) async {
+    // String dataConverted =
+    //     dataText.reduce((value, element) => '$value\n$element');
     final Directory directory = await getApplicationDocumentsDirectory();
     final File file = File('${directory.path}/temp.txt');
-    await file.writeAsString(dataConverted);
+    await file.writeAsString(dataText);
     await Share.shareXFiles([XFile(file.path)]);
   }
 

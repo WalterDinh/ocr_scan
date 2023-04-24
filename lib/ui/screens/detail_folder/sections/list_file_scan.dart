@@ -1,4 +1,4 @@
-part of '../scan_history.dart';
+part of '../detail_folder.dart';
 
 class ListFileScan extends StatefulWidget {
   const ListFileScan({

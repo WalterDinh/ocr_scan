@@ -44,8 +44,10 @@ class ItemScanFolder extends StatelessWidget {
                 width: TEXT_WIDTH,
                 child: Text(
                   folderName,
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  textWidthBasis: TextWidthBasis.longestLine,
                   style: Theme.of(context)
                       .textTheme
                       .labelSmall

@@ -4,7 +4,9 @@ class EmptyFolder extends StatelessWidget {
   const EmptyFolder({
     super.key,
     required this.context,
+    required this.onCreateFolder,
   });
+  final Function() onCreateFolder;
 
   final BuildContext context;
 
@@ -32,7 +34,7 @@ class EmptyFolder extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: onCreateFolder,
               child: const Text('Create new folder'),
             ),
           )

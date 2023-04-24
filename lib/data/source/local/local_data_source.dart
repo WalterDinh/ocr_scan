@@ -1,5 +1,6 @@
 import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/data/source/local/model/folder.dart';
+import 'package:my_app/data/source/local/model/search_history.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -37,7 +38,7 @@ class LocalDataSource {
         id INTEGER PRIMARY KEY,
         title TEXT,
         createDate TEXT,
-        size INTEGER,
+        size TEXT,
         dataText TEXT,
         folderId INTEGER,
         FOREIGN KEY (folderId) REFERENCES folders (id)
@@ -45,6 +46,68 @@ class LocalDataSource {
           ON UPDATE CASCADE
       )
       ''');
+
+    await db.execute('''
+      CREATE TABLE search_history (
+        id INTEGER PRIMARY KEY,
+        textSearch TEXT
+      )
+      ''');
+  }
+
+  Future<int> insertSearchHistory(SearchHistory searchText) async {
+    final db = await database;
+    //get the biggest id in the table
+    var table =
+        await db!.rawQuery("SELECT MAX(id)+1 as id FROM search_history");
+    int? id = table.first['id'] as int?;
+    await db.execute('''
+    DELETE FROM search_history
+    WHERE id NOT IN (
+      SELECT id FROM search_history ORDER BY id DESC LIMIT 6
+    )
+  ''');
+
+    //insert to the table using the new id
+    var raw = await db.rawInsert(
+        "INSERT Into search_history (id,textSearch)"
+        " VALUES (?,?)",
+        [id, searchText.textSearch]);
+
+    return raw;
+  }
+
+  Future<void> deleteHistorySearch(int id) async {
+    final db = await database;
+    await db!.delete(
+      'search_history',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<void> deleteOldestHistorySearch() async {
+    final db = await database;
+
+    var table =
+        await db!.rawQuery("SELECT MIN(id)+1 as id FROM search_history");
+    int? id = table.first['id'] as int?;
+    await db.delete(
+      'search_history',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<SearchHistory>> getAllHistorySearch() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db!.query('search_history', orderBy: "id DESC");
+    List<SearchHistory> list = maps.isNotEmpty
+        ? maps.map((c) => SearchHistory.fromMap(c)).toList()
+        : [];
+
+    return list;
   }
 
   Future<int> insertFolder(Folder folder) async {
@@ -71,12 +134,43 @@ class LocalDataSource {
     return list;
   }
 
+  Future<List<FileScan>> getAllFileScan() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db!.query('file_scan');
+    List<FileScan> list =
+        maps.isNotEmpty ? maps.map((c) => FileScan.fromMap(c)).toList() : [];
+
+    return list;
+  }
+
   Future<List<FileScan>> getListFileScanByFolder(int id) async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
         await db!.query('file_scan', where: 'folderId = ?', whereArgs: [id]);
     List<FileScan> list =
         maps.isNotEmpty ? maps.map((c) => FileScan.fromMap(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<List<FileScan>> getListFileScanBySearch(String textSearch) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db!.query('file_scan',
+        where: 'title LIKE ? OR dataText LIKE ?',
+        limit: 4,
+        whereArgs: ['%$textSearch%', '%$textSearch%']);
+    List<FileScan> list =
+        maps.isNotEmpty ? maps.map((c) => FileScan.fromMap(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<List<Folder>> getListFolderBySearch(String textSearch) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db!.query('folders',
+        where: 'title LIKE ?', limit: 4, whereArgs: ['%$textSearch%']);
+    List<Folder> list =
+        maps.isNotEmpty ? maps.map((c) => Folder.fromMap(c)).toList() : [];
 
     return list;
   }
@@ -113,30 +207,48 @@ class LocalDataSource {
 
   Future<void> updateFile(FileScan file, Folder? folder) async {
     final db = await database;
-    await db!.update(
-      'file_scan',
-      file.toMap(),
-      where: 'id = ?',
-      whereArgs: [file.id],
-    );
-    if (folder != null) {
-      await db.update(
+    if (file.folderId >= 0 &&
+        file.folderId != folder!.id &&
+        folder.totalFile > 0) {
+      Folder folder = await getFolder(file.folderId);
+      folder.totalFile = folder.totalFile - 1;
+
+      await db!.update(
+        'folders',
+        folder.toMap(),
+        where: 'id = ?',
+        whereArgs: [file.folderId],
+      );
+    }
+    if (folder != null && file.folderId != folder.id) {
+      folder.totalFile = folder.totalFile + 1;
+      await db!.update(
         'folders',
         folder.toMap(),
         where: 'id = ?',
         whereArgs: [folder.id],
       );
     }
+    file.folderId = folder?.id ?? -1;
+    await db!.update(
+      'file_scan',
+      file.toMap(),
+      where: 'id = ?',
+      whereArgs: [file.id],
+    );
   }
 
-  Future<void> deleteFile(int id, Folder? folder) async {
+  Future<void> deleteFile(FileScan file) async {
     final db = await database;
     await db!.delete(
       'file_scan',
       where: 'id = ?',
-      whereArgs: [id],
+      whereArgs: [file.id],
     );
-    if (folder != null) {
+    if (file.folderId >= 0) {
+      Folder folder = await getFolder(file.folderId);
+      folder.totalFile = folder.totalFile - 1;
+
       await db.update(
         'folders',
         folder.toMap(),

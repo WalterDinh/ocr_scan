@@ -7,7 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/data/source/local/model/folder.dart';
+import 'package:my_app/routes.dart';
+import 'package:my_app/states/file_manager/file_manager_bloc.dart';
 import 'package:my_app/states/folder_manager/folder_manager_bloc.dart';
 import 'package:my_app/states/folder_manager/folder_manager_selector.dart';
 import 'package:my_app/ui/widgets/item_folder_list.dart';
@@ -19,8 +22,8 @@ part 'sections/empty_folder.dart';
 part 'sections/list_folder.dart';
 
 class MoveFileScreen extends StatefulWidget {
-  const MoveFileScreen({super.key});
-
+  const MoveFileScreen({super.key, required this.fileScan});
+  final FileScan fileScan;
   @override
   State<StatefulWidget> createState() => _MoveFileScreenState();
 }
@@ -28,6 +31,7 @@ class MoveFileScreen extends StatefulWidget {
 class _MoveFileScreenState extends State<MoveFileScreen> {
   static const double leadingWidth = 44;
   FolderManagerBloc get folderManager => context.read<FolderManagerBloc>();
+  FileScanManagerBloc get filerManager => context.read<FileScanManagerBloc>();
 
   @override
   void initState() {
@@ -52,6 +56,11 @@ class _MoveFileScreenState extends State<MoveFileScreen> {
         );
       },
     );
+  }
+
+  _onMoveFileToFolder(Folder folder) {
+    filerManager.add(UpdateFileScanStarted(widget.fileScan, folder));
+    AppNavigator.pop();
   }
 
   @override
@@ -83,7 +92,7 @@ class _MoveFileScreenState extends State<MoveFileScreen> {
 
           return ListFolderSelector((data) {
             if (data.isNotEmpty) {
-              return const ListScanFolder();
+              return ListScanFolder(onMove: (p0) => _onMoveFileToFolder(p0));
             }
 
             return Column(
@@ -91,6 +100,7 @@ class _MoveFileScreenState extends State<MoveFileScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 EmptyFolder(
+                  onCreateFolder: _onOpenModalCreateFolder,
                   context: context,
                 )
               ],

@@ -3,8 +3,9 @@ part of '../move_file.dart';
 class ListScanFolder extends StatefulWidget {
   const ListScanFolder({
     super.key,
+    required this.onMove,
   });
-
+  final Function(Folder) onMove;
   @override
   State<ListScanFolder> createState() => _ListScanFolderState();
 }
@@ -16,7 +17,8 @@ class _ListScanFolderState extends State<ListScanFolder> {
         child: ListFolderSelector((data) => ListView.builder(
               itemBuilder: (context, index) {
                 return ItemFolderList(
-                    folderName: data[index].title, onPressFolder: () {});
+                    folderName: data[index].title,
+                    onPressFolder: (() => widget.onMove(data[index])));
               },
               itemCount: data.length,
             )));

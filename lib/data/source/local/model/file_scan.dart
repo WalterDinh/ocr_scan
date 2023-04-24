@@ -2,7 +2,7 @@ class FileScan {
   int id;
   String title;
   String createDate;
-  int size;
+  String size;
   String dataText;
   int folderId;
 
@@ -11,7 +11,7 @@ class FileScan {
       this.title = '',
       this.createDate = '',
       this.dataText = '',
-      this.size = 0,
+      this.size = '',
       this.folderId = -1});
 
   Map<String, dynamic> toMap() {

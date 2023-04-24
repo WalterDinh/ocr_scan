@@ -8,16 +8,21 @@ import 'package:intl/intl.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
 import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/data/source/local/model/folder.dart';
 import 'package:my_app/routes.dart';
+import 'package:my_app/states/file_manager/file_manager_bloc.dart';
+import 'package:my_app/states/file_manager/file_manager_selector.dart';
 import 'package:my_app/states/folder_manager/folder_manager_bloc.dart';
 import 'package:my_app/states/folder_manager/folder_manager_selector.dart';
 import 'package:my_app/ui/modals/create_folder_modal.dart';
+import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/home/widgets/search_input.dart';
 import 'package:my_app/ui/widgets/item_scan_folder.dart';
 import 'package:my_app/ui/widgets/item_scan_history.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 import 'package:my_app/ui/widgets/spacer.dart';
+import 'package:my_app/utils/size.dart';
 import '../../widgets/main_app_bar.dart';
 part 'sections/list_folder.dart';
 part 'sections/list_scan_history.dart';
@@ -30,16 +35,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _listScanFolder = [1, 2, 3, 4, 5, 6, 7];
-
-  final _listScanHistory = [1, 2, 3, 4, 5];
-
   FolderManagerBloc get folderManager => context.read<FolderManagerBloc>();
+  FileScanManagerBloc get filScanManager => context.read<FileScanManagerBloc>();
 
   @override
   void initState() {
     scheduleMicrotask(() async {
       folderManager.add(const GetAllFolderStarted());
+      filScanManager.add(const GetAllFileScanStarted());
     });
 
     super.initState();
@@ -65,12 +68,22 @@ class _HomeScreenState extends State<HomeScreen> {
     AppNavigator.push(Routes.setting);
   }
 
+  _onEdit(FileScan fileScan) {
+    AppNavigator.push(
+        Routes.edit_scan_result,
+        EditScanResultArgument(fileScan.dataText, (text) {
+          FileScan newFile = fileScan;
+          newFile.dataText = text;
+          filScanManager.add(UpdateFileScanStarted(fileScan, null));
+        }));
+  }
+
   _onOpenModalCreateFolder(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         DateTime now = DateTime.now();
-        String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+        String formattedDate = DateFormat('MM/dd/yyyy').format(now);
 
         return ModalCreateFolder(
           onSummit: (text) =>
@@ -79,6 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  _onDeleteFile(FileScan file) {
+    filScanManager.add(DeleteFileScanStarted(file));
   }
 
   @override
@@ -108,9 +125,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           _buildSectionHeader(
               'Scan history', _onNavigateToScanHistory, context),
-          ListScanHistory(
-            listScanHistory: _listScanHistory,
-          )
+          ListFileScanSelector((data) {
+            List<FileScan> dataList =
+                data.getRange(0, min(10, data.length)).toList();
+
+            return ListScanHistory(
+              onEdit: _onEdit,
+              onDelete: _onDeleteFile,
+              listScanHistory: dataList,
+            );
+          })
         ],
       ),
       floatingActionButton: _buildFabScan(context),
