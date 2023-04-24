@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,12 +15,10 @@ import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dar
 import 'package:my_app/ui/screens/scan_result/widgets/select_mimetype_modal.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/base/pair.dart';
 
 part 'sections/scan_result_image.dart';
-
 part 'sections/scan_result_text.dart';
 
 class ScanResultScreen extends StatefulWidget {
@@ -213,29 +210,25 @@ class _ScanResultScreenState extends State<ScanResultScreen>
   void _onTapBottomNavItem(int index, Pair data) async {
     switch (index) {
       case 0:
-        var status = await Permission.storage.status;
-        if (status.isGranted) {
-          // print(data.first);
-
-          // List<dynamic> dataText = data.first;
-          // print(data.first);
-          // String dataConverted =
-          //     dataText.reduce((value, element) => '$value\n$element');
-          final result = await PdfApi.saveDocumentToExternal(
-              text: data.first, fileInput: data.second);
-          if (result == null) {
-            _onShowAlertDialog("Error");
-          } else {
-            print(result);
+        if (_tabController!.index == 0) {
+          final result = await PdfApi.savePdfToExternal(text: data.first);
+          if (result) {
             _onShowAlertDialog("Success");
+          } else {
+            _onShowAlertDialog("Error");
           }
         } else {
-          Permission.storage.request();
+          final result = await PdfApi.saveTxtToExternal(text: data.first);
+          if (result) {
+            _onShowAlertDialog("Success");
+          } else {
+            _onShowAlertDialog("Error");
+          }
         }
         break;
       case 1:
         if (_tabController!.index == 0) {
-          PdfApi.shareDocument();
+          PdfApi.shareDocument(data.first);
         } else {
           // List<String> dataText = data.first;
           PdfApi.shareTxtFile(data.first);
@@ -261,9 +254,9 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                     // List<String> dataText = data.first as List<String>;
                     // String dataConverted =
                     //     dataText.reduce((value, element) => '$value\n$element');
-                    final result = await PdfApi.saveDocumentToExternal(
-                        text: data.first, fileInput: data.second);
-                    if (result == null) {
+                    final result =
+                        await PdfApi.savePdfToExternal(text: data.first);
+                    if (result) {
                       _onShowAlertDialog("Error");
                     } else {
                       _onShowAlertDialog("Success");
@@ -291,7 +284,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
               onTakeMimeType: (mimetype) async {
                 switch (mimetype) {
                   case MimeType.pdf:
-                    PdfApi.shareDocument();
+                    PdfApi.shareDocument(data.first);
                     break;
                   case MimeType.txt:
                     List<String> dataText = data.first;

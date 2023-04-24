@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:document_file_save_plus/document_file_save_plus.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
 import 'package:share_plus/share_plus.dart';
@@ -18,7 +21,7 @@ class PdfApi {
     );
 
     // passing the pdf and name of the docoment to make a direcotory in  the internal storage
-    return saveDocument(name: 'my_example.pdf', pdf: pdf);
+    return saveDocument(name: 'temp.pdf', pdf: pdf);
   }
 
   // it will make a named dircotory in the internal storage and then return to its call
@@ -39,21 +42,10 @@ class PdfApi {
     return file;
   }
 
-  static Future shareDocument() async {
-    final dir = await getApplicationDocumentsDirectory();
-    final filePath = '${dir.path}/my_example.pdf';
+  static Future shareDocument(String dataText) async {
+    final file = await generateCenteredText(dataText);
 
-    await Share.shareXFiles([XFile(filePath)]);
-  }
-
-  Future<String?> _findLocalPath() async {
-    if (Platform.isAndroid) {
-      return "/sdcard/download/";
-    } else {
-      var directory = await getApplicationDocumentsDirectory();
-
-      return '${directory.path}${Platform.pathSeparator}Download';
-    }
+    await Share.shareXFiles([XFile(file.path)]);
   }
 
   static shareTxtFile(String dataText) async {
@@ -65,42 +57,54 @@ class PdfApi {
     await Share.shareXFiles([XFile(file.path)]);
   }
 
-  static Future<File?> copyFileDocumentToExternalStorage({
-    required File file,
-  }) async {
-    final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final externalDir = await getExternalStorageDirectory();
-    if (externalDir == null) {
-      return null;
-    }
-    final newPath = "${externalDir.path}/DocumentScan/document_$timestamp.pdf";
-    File file = File(newPath);
-    if (!await file.exists()) {
-      file.create(recursive: true);
-    }
-    await file.copy(newPath);
+  static Future<bool> savePdfToExternal({required String text}) async {
+    final pdf = Document();
+    pdf.addPage(
+      Page(
+        build: (context) => Text(text,
+            style: const TextStyle(fontSize: 14), textAlign: TextAlign.left),
+      ),
+    );
+    final bytes = await pdf.save();
 
-    return file;
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final fileName = 'document_$timestamp.pdf';
+    try {
+      await DocumentFileSavePlus.saveFile(bytes, fileName, 'appliation/pdf');
+
+      return true;
+    } on PlatformException catch (e) {
+      return false;
+    }
+
+    // FIXME: if DocumentFileSavePlus doesn't work then try CRFileSaver
+    // print('file input ${fileInput.path}');
+    // try {
+    //   final file = await CRFileSaver.saveFile(
+    //     fileInput.path,
+    //     destinationFileName: fileName,
+    //   );
+    //   print('Saved to $file');
+    //
+    //   return true;
+    // } on PlatformException catch (e) {
+    //   print('file saving error: ${e.code}');
+    //
+    //   return false;
+    // }
   }
 
-  static Future<File?> saveDocumentToExternal({
-    required String text,
-    required File fileInput,
-  }) async {
-    final bytes = await fileInput.readAsBytes();
-
+  static Future<bool> saveTxtToExternal({required String text}) async {
+    final bytes = utf8.encode(text);
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final externalDir = Platform.isAndroid
-        ? await getExternalStorageDirectory()
-        : await getApplicationDocumentsDirectory();
+    final fileName = 'document_$timestamp.txt';
+    try {
+      await DocumentFileSavePlus.saveFile(
+          Uint8List.fromList(bytes), fileName, 'text/plain');
 
-    if (externalDir == null) {
-      return null;
+      return true;
+    } on PlatformException catch (e) {
+      return false;
     }
-    final newPath = "${externalDir.path}/document_$timestamp.pdf";
-    final file = File(newPath);
-    await file.writeAsBytes(bytes);
-
-    return file;
   }
 }
