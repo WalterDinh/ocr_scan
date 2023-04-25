@@ -11,7 +11,9 @@ class ListScanHistory extends StatelessWidget {
   final List<FileScan> _listScanHistory;
   final Function(FileScan) onEdit;
 
-  _onShare() {}
+  _onShare(String data) {
+    PdfApi.shareDocument(data);
+  }
 
   _onHandleOptions(HistoryOptionType item, FileScan file) {
     if (item == HistoryOptionType.move) {
@@ -20,6 +22,10 @@ class ListScanHistory extends StatelessWidget {
     if (item == HistoryOptionType.delete) {
       onDelete(file);
     }
+  }
+
+  _onNavigateToDetail(FileScan file) {
+    AppNavigator.push(Routes.file_detail, file);
   }
 
   @override
@@ -36,11 +42,11 @@ class ListScanHistory extends StatelessWidget {
 
                 return ItemScanHistory(
                   onPressOption: (item) => _onHandleOptions(item, itemData),
-                  onPressItem: () {},
+                  onPressItem: () => _onNavigateToDetail(itemData),
                   dateTime: '${itemData.size} ${itemData.createDate}',
                   fileName: 'Scan documents',
                   onEdit: () => onEdit(itemData),
-                  onShare: _onShare,
+                  onShare: () => _onShare(itemData.dataText),
                   pathUrl: '',
                 );
               },

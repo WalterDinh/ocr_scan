@@ -1,4 +1,4 @@
-part of '../scan_result.dart';
+part of '../detail_file.dart';
 
 class ScanResultText extends StatefulWidget {
   const ScanResultText({Key? key}) : super(key: key);

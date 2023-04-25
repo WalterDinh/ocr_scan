@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
+import 'package:my_app/core/pdf.dart';
 import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/routes.dart';

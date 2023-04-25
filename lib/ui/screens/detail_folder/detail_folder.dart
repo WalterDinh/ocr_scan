@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/configs/images.dart';
+import 'package:my_app/core/pdf.dart';
 import 'package:my_app/core/values/app_values.dart';
 import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/data/source/local/model/folder.dart';
@@ -13,6 +14,7 @@ import 'package:my_app/states/file_manager/file_manager_bloc.dart';
 import 'package:my_app/states/folder_detail_manager/folder_detail_bloc.dart';
 import 'package:my_app/states/folder_detail_manager/folder_detail_selector.dart';
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
+import 'package:my_app/ui/screens/scan_history/scan_history.dart';
 import 'package:my_app/ui/widgets/item_scan_history.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 part 'sections/list_file_scan.dart';
@@ -122,9 +124,9 @@ class _FolderDetailState extends State<FolderDetail> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // EmptyHistory(
-                //   context: context,
-                // )
+                EmptyHistory(
+                  context: context,
+                )
               ],
             );
           });

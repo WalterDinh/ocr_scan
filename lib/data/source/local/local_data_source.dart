@@ -207,11 +207,9 @@ class LocalDataSource {
 
   Future<void> updateFile(FileScan file, Folder? folder) async {
     final db = await database;
-    if (file.folderId >= 0 &&
-        file.folderId != folder!.id &&
-        folder.totalFile > 0) {
+    if (file.folderId >= 0 && file.folderId != folder!.id) {
       Folder folder = await getFolder(file.folderId);
-      folder.totalFile = folder.totalFile - 1;
+      folder.totalFile = folder.totalFile > 0 ? folder.totalFile - 1 : 0;
 
       await db!.update(
         'folders',

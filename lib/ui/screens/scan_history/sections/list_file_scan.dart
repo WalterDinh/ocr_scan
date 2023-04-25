@@ -15,7 +15,13 @@ class ListFileScan extends StatefulWidget {
   State<ListFileScan> createState() => _ListFileScanState();
 }
 
-_onShare() {}
+_onShare(String data) {
+  PdfApi.shareDocument(data);
+}
+
+_onNavigateToDetail(FileScan file) {
+  AppNavigator.push(Routes.file_detail, file);
+}
 
 class _ListFileScanState extends State<ListFileScan> {
   @override
@@ -29,11 +35,11 @@ class _ListFileScanState extends State<ListFileScan> {
 
             return ItemScanHistory(
               onPressOption: (type) => widget.onHandleOptions(type, itemData),
-              onPressItem: () {},
+              onPressItem: () => _onNavigateToDetail(itemData),
               dateTime: '${itemData.size} ${itemData.createDate}',
               fileName: 'Scan documents',
               onEdit: () => widget.onEdit(itemData),
-              onShare: _onShare,
+              onShare: () => _onShare(itemData.dataText),
               pathUrl: '',
             );
           },

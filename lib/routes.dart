@@ -4,8 +4,11 @@ import 'package:my_app/core/fade_page_route.dart';
 import 'package:my_app/data/repositories/local_repository.dart';
 import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/data/source/local/model/folder.dart';
+import 'package:my_app/states/file_detail_manager/file_detail_manager_bloc.dart';
+import 'package:my_app/states/file_manager/file_manager_bloc.dart';
 import 'package:my_app/states/folder_detail_manager/folder_detail_bloc.dart';
 import 'package:my_app/states/search/search_bloc.dart';
+import 'package:my_app/ui/screens/detail_file/detail_file.dart';
 import 'package:my_app/ui/screens/detail_folder/detail_folder.dart';
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/intro/intro.dart';
@@ -31,7 +34,8 @@ enum Routes {
   scan_history,
   setting,
   edit_scan_result,
-  folder_detail
+  folder_detail,
+  file_detail
 }
 
 class _Paths {
@@ -47,6 +51,7 @@ class _Paths {
   static const String setting = '/setting';
   static const String edit_scan_result = '/edit_scan_result';
   static const String folder_detail = '/folder_detail';
+  static const String file_detail = '/file_detail';
 
   static const Map<Routes, String> _pathMap = {
     Routes.splash: _Paths.splash,
@@ -61,6 +66,7 @@ class _Paths {
     Routes.setting: _Paths.setting,
     Routes.edit_scan_result: _Paths.edit_scan_result,
     Routes.folder_detail: _Paths.folder_detail,
+    Routes.file_detail: _Paths.file_detail,
   };
 
   static String of(Routes route) => _pathMap[route] ?? splash;
@@ -97,9 +103,18 @@ class AppNavigator {
         return FadeRoute(page: const ScanHistoryScreen());
       case _Paths.setting:
         return FadeRoute(page: const SettingScreen());
+      case _Paths.file_detail:
+        final args = settings.arguments as FileScan;
+        return FadeRoute(
+            page: BlocProvider<FileDetailBloc>(
+                create: (context) => FileDetailBloc(
+                      context.read<FileScanManagerBloc>(),
+                    ),
+                child: DetailFileScreen(
+                  file: args,
+                )));
       case _Paths.folder_detail:
         final args = settings.arguments as Folder;
-
         return FadeRoute(
             page: BlocProvider<FolderDetailBloc>(
                 create: (context) => FolderDetailBloc(
@@ -108,7 +123,6 @@ class AppNavigator {
                 child: FolderDetail(
                   folder: args,
                 )));
-
       case _Paths.edit_scan_result:
         final args = settings.arguments as EditScanResultArgument;
         return FadeRoute(

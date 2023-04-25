@@ -13,6 +13,10 @@ class ResultSearch extends StatelessWidget {
     AppNavigator.push(Routes.folder_detail, folder);
   }
 
+  _onNavigateToDetail(FileScan file) {
+    AppNavigator.push(Routes.file_detail, file);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -53,9 +57,7 @@ class ResultSearch extends StatelessWidget {
               return Column(
                 children: data
                     .map((e) => ItemSearch(
-                          onPress: () {
-                            return;
-                          },
+                          onPress: () => _onNavigateToDetail(e),
                           title: e.title,
                           type: ItemSearchType.file,
                         ))

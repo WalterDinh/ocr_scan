@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,32 +8,33 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:my_app/configs/colors.dart';
 import 'package:my_app/core/pdf.dart';
 import 'package:my_app/core/values/app_values.dart';
+import 'package:my_app/data/source/local/model/file_scan.dart';
 import 'package:my_app/routes.dart';
-import 'package:my_app/states/scan_photo/scan_photo_bloc.dart';
-import 'package:my_app/states/scan_photo/scan_photo_selector.dart';
+import 'package:my_app/states/file_detail_manager/file_detail_manager_bloc.dart';
+import 'package:my_app/states/file_detail_manager/file_detail_manager_selector.dart';
 import 'package:my_app/states/select_image_from_gallery/select_image_from_gallery_bloc.dart';
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
-import 'package:my_app/ui/screens/scan_result/widgets/select_mimetype_modal.dart';
 import 'package:my_app/ui/widgets/main_app_bar.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
 
 import '../../../core/base/pair.dart';
 
 part 'sections/scan_result_image.dart';
+
 part 'sections/scan_result_text.dart';
 
-class ScanResultScreen extends StatefulWidget {
-  const ScanResultScreen({Key? key}) : super(key: key);
-
+class DetailFileScreen extends StatefulWidget {
+  const DetailFileScreen({Key? key, required this.file}) : super(key: key);
+  final FileScan file;
   @override
-  State<ScanResultScreen> createState() => _ScanResultScreenState();
+  State<DetailFileScreen> createState() => _DetailFileScreenState();
 }
 
-class _ScanResultScreenState extends State<ScanResultScreen>
+class _DetailFileScreenState extends State<DetailFileScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
 
-  ScanPhotoBloc get scanPhotoBloc => context.read<ScanPhotoBloc>();
+  FileDetailBloc get fileDetailBloc => context.read<FileDetailBloc>();
 
   SelectImageFromGalleryBloc get selectImageFromGalleryBloc =>
       context.read<SelectImageFromGalleryBloc>();
@@ -40,10 +42,9 @@ class _ScanResultScreenState extends State<ScanResultScreen>
   @override
   void initState() {
     scheduleMicrotask(() {
-      _tabController = TabController(length: 2, vsync: this, initialIndex: 1);
+      _tabController = TabController(length: 2, vsync: this, initialIndex: 0);
 
-      scanPhotoBloc.add(
-          ScanPhotoLoadStarted(selectImageFromGalleryBloc.state.photoScan));
+      fileDetailBloc.add(FileDetailLoadStarted(widget.file.dataText));
     });
     super.initState();
   }
@@ -56,8 +57,8 @@ class _ScanResultScreenState extends State<ScanResultScreen>
 
   @override
   Widget build(BuildContext context) {
-    return ScanPhotoStateStatusSelector((status) {
-      if (status == ScanPhotoStateStatus.loading) {
+    return FileDetailStateStatusSelector((status) {
+      if (status == FileDetailStateStatus.loading) {
         return _buildLoading();
       }
 
@@ -81,11 +82,11 @@ class _ScanResultScreenState extends State<ScanResultScreen>
                             )),
                           )
                         ]),
-                    body: status == ScanPhotoStateStatus.loadFailure
+                    body: status == FileDetailStateStatus.loadFailure
                         ? Scaffold(body: _buildError())
                         : _buildBody(),
                   ))),
-          status != ScanPhotoStateStatus.loadFailure
+          status != FileDetailStateStatus.loadFailure
               ? CurrentScanDataSelector(
                   (data) {
                     return BottomNavigationBar(
@@ -220,19 +221,27 @@ class _ScanResultScreenState extends State<ScanResultScreen>
   }
 
   void _onTapBottomNavItem(int index, Pair data) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     switch (index) {
       case 0:
         if (_tabController!.index == 0) {
           final result = await PdfApi.savePdfToExternal(text: data.first);
           if (result) {
-            _onShowAlertDialog("Success");
+            if (Platform.isAndroid) {
+              scaffoldMessenger
+                  .showSnackBar(const SnackBar(content: Text('Success')));
+            }
           } else {
             _onShowAlertDialog("Error");
           }
         } else {
           final result = await PdfApi.saveTxtToExternal(text: data.first);
           if (result) {
-            _onShowAlertDialog("Success");
+            if (Platform.isAndroid) {
+              scaffoldMessenger
+                  .showSnackBar(const SnackBar(content: Text('Success')));
+            }
           } else {
             _onShowAlertDialog("Error");
           }
@@ -258,7 +267,7 @@ class _ScanResultScreenState extends State<ScanResultScreen>
     AppNavigator.push(
         Routes.edit_scan_result,
         EditScanResultArgument(data.first, (text) {
-          scanPhotoBloc.add(ScanTextChanged(text));
+          fileDetailBloc.add(ScanTextChanged(text, widget.file));
         }));
   }
 
