@@ -72,6 +72,7 @@ class FileScanManagerBloc
           file: event.fileScan, folder: event.folder);
       FileScan newFile = event.fileScan;
       newFile.folderId = event.folder!.id;
+      await _localDataRepository.getAllFolder();
       emit(state.asLoadUpdateFileScanSuccess(newFile));
     } on Exception {
       emit(state.copyWith(status: FileScanManagerStateStatus.updateFailure));

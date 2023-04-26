@@ -70,7 +70,6 @@ class FolderDetailBloc
     try {
       List<FileScan> folderList = await _localDataRepository
           .getFileScanByFolder(folderId: event.folderId);
-      print(folderList);
       emit(state.asLoadGetAllFolderDetailSuccess(folderList));
     } on Exception {
       emit(

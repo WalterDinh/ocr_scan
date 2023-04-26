@@ -86,9 +86,12 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
 
   Future _onNavigateToScan(AssetEntity? assetData) async {
     File? data = await assetData?.file;
-    if (data != null) {
+    XFile file = XFile(data!.path);
+    final cropFile = await imageHelper.crop(file: file);
+    if (cropFile != null) {
+      final File file = File(cropFile.path);
       selectImageFromGalleryBloc
-          .add(SelectImageFromGallerySetPhoto(file: data));
+          .add(SelectImageFromGallerySetPhoto(file: file));
       AppNavigator.push(Routes.scan_result);
     }
   }

@@ -42,6 +42,7 @@ class FolderManagerBloc extends Bloc<FolderManagerEvent, FolderManagerState> {
       int folderId =
           await _localDataRepository.insertFolder(folder: event.folder);
       if (folderId >= 0) {
+        event.folder.id = folderId;
         emit(state.asLoadCreateFolderSuccess(event.folder));
       }
       emit(state.asLoadGetAllFolderFailure(Exception()));

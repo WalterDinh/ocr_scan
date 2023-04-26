@@ -195,12 +195,15 @@ class LocalDataSource {
     return raw;
   }
 
-  Future<Folder> getFolder(int id) async {
+  Future<Folder?> getFolder(int id) async {
     final db = await database;
     final List<Map<String, dynamic>> maps =
         await db!.query('folders', where: 'id = ?', whereArgs: [id]);
     List<Folder> list =
         maps.isNotEmpty ? maps.map((c) => Folder.fromMap(c)).toList() : [];
+    if (list.isEmpty) {
+      return null;
+    }
 
     return list.first;
   }
@@ -208,15 +211,18 @@ class LocalDataSource {
   Future<void> updateFile(FileScan file, Folder? folder) async {
     final db = await database;
     if (file.folderId >= 0 && file.folderId != folder!.id) {
-      Folder folder = await getFolder(file.folderId);
-      folder.totalFile = folder.totalFile > 0 ? folder.totalFile - 1 : 0;
+      Folder? fileFolder = await getFolder(file.folderId);
+      if (fileFolder != null) {
+        fileFolder.totalFile =
+            fileFolder.totalFile > 0 ? fileFolder.totalFile - 1 : 0;
 
-      await db!.update(
-        'folders',
-        folder.toMap(),
-        where: 'id = ?',
-        whereArgs: [file.folderId],
-      );
+        await db!.update(
+          'folders',
+          fileFolder.toMap(),
+          where: 'id = ?',
+          whereArgs: [file.folderId],
+        );
+      }
     }
     if (folder != null && file.folderId != folder.id) {
       folder.totalFile = folder.totalFile + 1;
@@ -244,7 +250,8 @@ class LocalDataSource {
       whereArgs: [file.id],
     );
     if (file.folderId >= 0) {
-      Folder folder = await getFolder(file.folderId);
+      Folder? folder = await getFolder(file.folderId);
+      if (folder == null) return;
       folder.totalFile = folder.totalFile - 1;
 
       await db.update(
