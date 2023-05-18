@@ -11,13 +11,11 @@ class ItemGallery extends StatelessWidget {
   const ItemGallery({
     super.key,
     required this.asset,
-    required this.data,
     required this.onPress,
     required this.index,
   });
 
   final AssetEntity asset;
-  final Uint8List data;
   final Function() onPress;
   final int index;
   @override
@@ -28,17 +26,14 @@ class ItemGallery extends StatelessWidget {
             child: Ripple(
                 onTap: onPress,
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4.0),
-                    child: FadeInImage(
-                      placeholder:
-                          const AssetImage('assets/images/logo_flutter.jpg'),
-                      image: MemoryImage(
-                        data,
-                      ),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                    )))),
+                  borderRadius: BorderRadius.circular(4.0),
+                  child: AssetEntityImage(
+                    asset,
+                    isOriginal: false,
+                    thumbnailSize: const ThumbnailSize.square(250),
+                    fit: BoxFit.cover,
+                  ),
+                ))),
         Align(
           alignment: Alignment.topRight,
           child: Padding(

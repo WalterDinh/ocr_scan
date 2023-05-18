@@ -19,6 +19,7 @@ import 'package:my_app/states/folder_manager/folder_manager_selector.dart';
 import 'package:my_app/ui/modals/create_folder_modal.dart';
 import 'package:my_app/ui/screens/edit_scan_result/edit_scan_result_argument.dart';
 import 'package:my_app/ui/screens/home/widgets/search_input.dart';
+import 'package:my_app/ui/screens/scan_history/scan_history.dart';
 import 'package:my_app/ui/widgets/item_scan_folder.dart';
 import 'package:my_app/ui/widgets/item_scan_history.dart';
 import 'package:my_app/ui/widgets/ripple.dart';
@@ -128,6 +129,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ListFileScanSelector((data) {
             List<FileScan> dataList =
                 data.getRange(0, min(10, data.length)).toList();
+            if (dataList.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: EmptyHistory(
+                  context: context,
+                ),
+              );
+            }
 
             return ListScanHistory(
               onEdit: _onEdit,

@@ -44,7 +44,7 @@ class ListScanHistory extends StatelessWidget {
                   onPressOption: (item) => _onHandleOptions(item, itemData),
                   onPressItem: () => _onNavigateToDetail(itemData),
                   dateTime: '${itemData.size} ${itemData.createDate}',
-                  fileName: 'Scan documents',
+                  fileName: itemData.title,
                   onEdit: () => onEdit(itemData),
                   onShare: () => _onShare(itemData.dataText),
                   pathUrl: '',

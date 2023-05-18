@@ -7,3 +7,5 @@ String removeTrailingZero(double n) {
 
   return formatter.format(n);
 }
+
+String firstOpenApp = 'checkFirstOpenApp';

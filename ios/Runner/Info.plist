@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Document Scan Ai</string>
+	<string>U2Scan</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -19,21 +19,23 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to use your microphone (for videos)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To take photo from library for extract text from image, allow us to access your photos</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>To select local pictures from library, and save posts to the device, allow us to access your photos</string>
+	<string>To select local pictures from library, and save posts to the device for extract text from image, allow us to access your photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To select local pictures from library, and save posts to the device, allow us to access your photos</string>
+	<string>To select local pictures from library, and save posts to the device for extract text from image, allow us to access your photos</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIFileSharingEnabled</key>

@@ -254,21 +254,13 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
                       crossAxisCount: 3),
                   delegate: SliverChildBuilderDelegate(
                     (item, index) {
-                      return FutureBuilder(
-                          future: listMedia[index].thumbnailData,
-                          builder: (BuildContext context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return ItemGallery(
-                                index: index,
-                                onPress: () => _onSelectPhoto(index),
-                                asset: listMedia[index],
-                                data: snapshot.data as Uint8List,
-                              );
-                            }
+                      AssetEntity photo = listMedia[index];
 
-                            return Container();
-                          });
+                      return ItemGallery(
+                        onPress: () => _onSelectPhoto(index),
+                        asset: photo,
+                        index: index,
+                      );
                     },
                     childCount: listMedia.length,
                   ));
@@ -281,8 +273,10 @@ class SelectPhotoScreenState extends State<SelectPhotoScreen> {
 
             return Container(
               padding: const EdgeInsets.only(bottom: 28),
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
+              alignment: Alignment.bottomCenter,
+              child: const CircularProgressIndicator(
+                color: AppColors.darkGreen,
+              ),
             );
           }),
         ),

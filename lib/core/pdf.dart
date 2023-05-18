@@ -4,19 +4,21 @@ import 'dart:io';
 import 'package:document_file_save_plus/document_file_save_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/widgets.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 
 class PdfApi {
   static Future<File> generateCenteredText(String text) async {
     // making a pdf document to store a text and it is provided by pdf pakage
-    final pdf = Document();
+    final pdf = pw.Document();
 
+    final ttf = pw.Font.ttf(
+        await rootBundle.load('assets/fonts/EncodeSans-Regular.ttf'));
     // Text is added here in center
     pdf.addPage(
-      Page(
-        build: (context) => Text(text,
-            style: const TextStyle(fontSize: 14), textAlign: TextAlign.left),
+      pw.Page(
+        build: (context) => pw.Text(text,
+            style: pw.TextStyle(fontSize: 14), textAlign: pw.TextAlign.left),
       ),
     );
 
@@ -27,7 +29,7 @@ class PdfApi {
   // it will make a named dircotory in the internal storage and then return to its call
   static Future<File> saveDocument({
     required String name,
-    required Document pdf,
+    required pw.Document pdf,
   }) async {
     // pdf save to the variable called bytes
     final bytes = await pdf.save();
@@ -58,11 +60,12 @@ class PdfApi {
   }
 
   static Future<bool> savePdfToExternal({required String text}) async {
-    final pdf = Document();
+    final pdf = pw.Document();
     pdf.addPage(
-      Page(
-        build: (context) => Text(text,
-            style: const TextStyle(fontSize: 14), textAlign: TextAlign.left),
+      pw.Page(
+        build: (context) => pw.Text(text,
+            style: const pw.TextStyle(fontSize: 14),
+            textAlign: pw.TextAlign.left),
       ),
     );
     final bytes = await pdf.save();

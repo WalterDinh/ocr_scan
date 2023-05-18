@@ -17,6 +17,7 @@ class Theming {
     textButtonTheme: TextButtonThemeApp.dartTextButtonTheme,
     outlinedButtonTheme: OutlinedButtonThemeApp.dartOutlinedButtonTheme,
     elevatedButtonTheme: ElevatedButtonThemeApp.dartElevatedButtonTheme,
+    fontFamily: 'EncodeSans',
     scaffoldBackgroundColor: AppColors.black,
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
         background: AppColors.black,
@@ -35,6 +36,7 @@ class Theming {
     textButtonTheme: TextButtonThemeApp.lightTextButtonTheme,
     outlinedButtonTheme: OutlinedButtonThemeApp.lightOutlinedButtonTheme,
     elevatedButtonTheme: ElevatedButtonThemeApp.lightElevatedButtonTheme,
+    fontFamily: 'EncodeSans',
     textTheme: TextThemeApp.lightTextTheme,
     scaffoldBackgroundColor: Colors.white,
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
@@ -45,7 +47,8 @@ class Theming {
 }
 
 class InputDecorationThemeApp {
-  static InputDecorationTheme inputDecorationStyle = InputDecorationTheme();
+  static InputDecorationTheme inputDecorationStyle =
+      const InputDecorationTheme();
 
   static const InputDecorationTheme lightInputDecorationStyle =
       InputDecorationTheme(
