@@ -14,6 +14,15 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		E15C4F5DFCC42CC167D3EE6E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F23AA3F3015FCB74228A0F /* Pods_Runner.framework */; };
+		EA3829172A169495008F114F /* EncodeSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA38290E2A169493008F114F /* EncodeSans-Regular.ttf */; };
+		EA3829182A169495008F114F /* EncodeSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA38290F2A169493008F114F /* EncodeSans-ExtraBold.ttf */; };
+		EA3829192A169495008F114F /* EncodeSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829102A169493008F114F /* EncodeSans-SemiBold.ttf */; };
+		EA38291A2A169495008F114F /* EncodeSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829112A169494008F114F /* EncodeSans-ExtraLight.ttf */; };
+		EA38291B2A169495008F114F /* EncodeSans-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829122A169494008F114F /* EncodeSans-Thin.ttf */; };
+		EA38291C2A169495008F114F /* EncodeSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829132A169494008F114F /* EncodeSans-Bold.ttf */; };
+		EA38291D2A169495008F114F /* EncodeSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829142A169494008F114F /* EncodeSans-Light.ttf */; };
+		EA38291E2A169495008F114F /* EncodeSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829152A169494008F114F /* EncodeSans-Black.ttf */; };
+		EA38291F2A169495008F114F /* EncodeSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3829162A169495008F114F /* EncodeSans-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -46,6 +55,15 @@
 		B3C8AA7CF7EF08833C49633E /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		DFDB6A146F1BBBCA943039C7 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		E4B5CEDB8120F67E498C7461 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		EA38290E2A169493008F114F /* EncodeSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-Regular.ttf"; path = "../../assets/fonts/EncodeSans-Regular.ttf"; sourceTree = "<group>"; };
+		EA38290F2A169493008F114F /* EncodeSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-ExtraBold.ttf"; path = "../../assets/fonts/EncodeSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		EA3829102A169493008F114F /* EncodeSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-SemiBold.ttf"; path = "../../assets/fonts/EncodeSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		EA3829112A169494008F114F /* EncodeSans-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-ExtraLight.ttf"; path = "../../assets/fonts/EncodeSans-ExtraLight.ttf"; sourceTree = "<group>"; };
+		EA3829122A169494008F114F /* EncodeSans-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-Thin.ttf"; path = "../../assets/fonts/EncodeSans-Thin.ttf"; sourceTree = "<group>"; };
+		EA3829132A169494008F114F /* EncodeSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-Bold.ttf"; path = "../../assets/fonts/EncodeSans-Bold.ttf"; sourceTree = "<group>"; };
+		EA3829142A169494008F114F /* EncodeSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-Light.ttf"; path = "../../assets/fonts/EncodeSans-Light.ttf"; sourceTree = "<group>"; };
+		EA3829152A169494008F114F /* EncodeSans-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-Black.ttf"; path = "../../assets/fonts/EncodeSans-Black.ttf"; sourceTree = "<group>"; };
+		EA3829162A169495008F114F /* EncodeSans-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "EncodeSans-Medium.ttf"; path = "../../assets/fonts/EncodeSans-Medium.ttf"; sourceTree = "<group>"; };
 		F4F23AA3F3015FCB74228A0F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -85,6 +103,7 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				EA38290D2A169446008F114F /* Fonts */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
 				97C146EF1CF9000F007C117D /* Products */,
@@ -114,6 +133,22 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		EA38290D2A169446008F114F /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				EA3829152A169494008F114F /* EncodeSans-Black.ttf */,
+				EA3829132A169494008F114F /* EncodeSans-Bold.ttf */,
+				EA38290F2A169493008F114F /* EncodeSans-ExtraBold.ttf */,
+				EA3829112A169494008F114F /* EncodeSans-ExtraLight.ttf */,
+				EA3829142A169494008F114F /* EncodeSans-Light.ttf */,
+				EA3829162A169495008F114F /* EncodeSans-Medium.ttf */,
+				EA38290E2A169493008F114F /* EncodeSans-Regular.ttf */,
+				EA3829102A169493008F114F /* EncodeSans-SemiBold.ttf */,
+				EA3829122A169494008F114F /* EncodeSans-Thin.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		EE8550A79AFAFA9100B6D3D6 /* Frameworks */ = {
@@ -188,9 +223,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				EA38291A2A169495008F114F /* EncodeSans-ExtraLight.ttf in Resources */,
+				EA38291B2A169495008F114F /* EncodeSans-Thin.ttf in Resources */,
+				EA3829192A169495008F114F /* EncodeSans-SemiBold.ttf in Resources */,
+				EA38291D2A169495008F114F /* EncodeSans-Light.ttf in Resources */,
+				EA38291E2A169495008F114F /* EncodeSans-Black.ttf in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				EA3829172A169495008F114F /* EncodeSans-Regular.ttf in Resources */,
+				EA38291C2A169495008F114F /* EncodeSans-Bold.ttf in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				EA38291F2A169495008F114F /* EncodeSans-Medium.ttf in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				EA3829182A169495008F114F /* EncodeSans-ExtraBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,13 +405,13 @@
 				DEVELOPMENT_TEAM = 668U627Y5V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "U2 Scan";
+				INFOPLIST_KEY_CFBundleDisplayName = U2Scan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.u2u.u2ocr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -498,13 +542,13 @@
 				DEVELOPMENT_TEAM = 668U627Y5V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "U2 Scan";
+				INFOPLIST_KEY_CFBundleDisplayName = U2Scan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.u2u.u2ocr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -529,13 +573,13 @@
 				DEVELOPMENT_TEAM = 668U627Y5V;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "U2 Scan";
+				INFOPLIST_KEY_CFBundleDisplayName = U2Scan;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.books";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.u2u.u2ocr;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

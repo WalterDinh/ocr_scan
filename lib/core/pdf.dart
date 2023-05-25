@@ -18,7 +18,8 @@ class PdfApi {
     pdf.addPage(
       pw.Page(
         build: (context) => pw.Text(text,
-            style: pw.TextStyle(fontSize: 14), textAlign: pw.TextAlign.left),
+            style: const pw.TextStyle(fontSize: 14),
+            textAlign: pw.TextAlign.left),
       ),
     );
 

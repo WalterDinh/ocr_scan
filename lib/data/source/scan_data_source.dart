@@ -8,7 +8,7 @@ class ScanDataSource {
   ScanDataSource(this.networkManager);
 
   static const String url =
-      'http://171.241.101.185:7007/Nhan_dang_tieng_viet/Springai99';
+      'http://149.28.19.205:7007/Nhan_dang_tieng_viet/Springai99';
 
   final NetworkManager networkManager;
 

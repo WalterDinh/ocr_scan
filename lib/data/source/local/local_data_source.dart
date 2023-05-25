@@ -233,7 +233,7 @@ class LocalDataSource {
         whereArgs: [folder.id],
       );
     }
-    file.folderId = folder?.id ?? -1;
+    file.folderId = folder != null ? folder.id : file.folderId;
     await db!.update(
       'file_scan',
       file.toMap(),
